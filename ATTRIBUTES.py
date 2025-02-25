@@ -12,19 +12,19 @@ class ATTRIBUTES:
         col1, col2 = st.columns([1, 2],border=True)
         # Radio buttons in column 1
         operations = [
-            "DataFrame.index",
-            "DataFrame.columns",
-            "DataFrame.dtypes",
-            "DataFrame.info",
-            "DataFrame.select_dtypes",
-            "DataFrame.values",
-            "DataFrame.axes",
-            "DataFrame.ndim",
-            "DataFrame.size",
-            "DataFrame.shape",
-            "DataFrame.memory_usage",
-            "DataFrame.empty",
-            "DataFrame.addColumnNames",
+            "See Indexes",
+            "See Columns",
+            "See Columns Data Types",
+            "Information On DataSet",
+            "Create Sub Data With Similer Data Types",
+            "See Data Set Values",
+            "See Axes",
+            "Dataset Dimension",
+            "Data Set Size",
+            "(Columns,Rows)",
+            "memory_usage",
+            "Is Data Frame Empty?",
+            "Add Column Names",
             'Find Minimum - Maximum Values',
             "Find Unique Values",
             "Find Number Of Unique Values in A Column",
@@ -39,36 +39,36 @@ class ATTRIBUTES:
         selected_operation = col1.radio("Select an operation:", operations)
 
         # Display result in column 2
-        if selected_operation == "DataFrame.index":
+        if selected_operation == "See Indexes":
             col2.dataframe(self.dataframe.index)
-        elif selected_operation == "DataFrame.columns":
+        elif selected_operation == "See Columns":
             col2.write(list(self.dataframe.columns))
-        elif selected_operation == "DataFrame.dtypes":
+        elif selected_operation == "See Columns Data Types":
             col2.dataframe(self.dataframe.dtypes)
-        elif selected_operation == "DataFrame.info":
+        elif selected_operation == "Information On DataSet":
             col2.dataframe(self.dataframe.info())
-        elif selected_operation == "DataFrame.select_dtypes":
+        elif selected_operation == "Create Sub Data With Similer Data Types":
             # Display available datatypes in a multiselect
             available_dtypes = list(self.dataframe.dtypes.unique())
             selected_dtypes = col2.multiselect("Select datatypes to include:", available_dtypes)
             if selected_dtypes:
                 filtered_df = self.dataframe.select_dtypes(include=selected_dtypes)
                 col2.dataframe(filtered_df)
-        elif selected_operation == "DataFrame.values":
+        elif selected_operation == "See Data Set Values":
             col2.write(self.dataframe.values)
-        elif selected_operation == "DataFrame.axes":
+        elif selected_operation == "See Axes":
             col2.write(self.dataframe.axes)
-        elif selected_operation == "DataFrame.ndim":
+        elif selected_operation == "Dataset Dimension":
             col2.write(self.dataframe.ndim)
-        elif selected_operation == "DataFrame.size":
+        elif selected_operation == "Data Set Size":
             col2.write(self.dataframe.size)
-        elif selected_operation == "DataFrame.shape":
+        elif selected_operation == "(Columns,Rows)":
             col2.write(self.dataframe.shape)
-        elif selected_operation == "DataFrame.memory_usage":
+        elif selected_operation == "memory_usage":
             col2.write(self.dataframe.memory_usage())
-        elif selected_operation == "DataFrame.empty":
+        elif selected_operation == "Is Data Frame Empty?":
             col2.write(self.dataframe.empty)
-        elif selected_operation == "DataFrame.addColumnNames":
+        elif selected_operation == "Add Column Names":
             values=col2.text_input("Please Input the column names with ',' as seperator")
             if col2.button("Add These Column Names",use_container_width=True,type='primary'):
                 if values:
