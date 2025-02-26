@@ -15,8 +15,8 @@ class Strings:
                                                               "Starts With","find substring strting position from left",
                                                               "find substring starting position from right","is alpha numeric",
                                                               "is alpha","is decimal","is int","is ascii","is lower","is upper",
-                                                              "is printable","is space","is title","split","left split","right split","remove preffix",
-                                                              "remove suffix"])
+                                                              "is printable","is space","is title","split","right split","remove preffix",
+                                                              "remove suffix","trim white spaces on both sides of text","trim white spaces on left side of the etxt","trim white spaces on the right side of the text"])
       try:
         if option=="Capitalize":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
@@ -234,7 +234,7 @@ class Strings:
           delimeter=col2.text_input("Specify the prefix to remove")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(remove preffix)"]=self.dataset[selected_columns].str.removepreffix(delimeter)
+            data[f"{selected_columns}(remove preffix)"]=self.dataset[selected_columns].str.removeprefix(delimeter)
             col2.dataframe(data)
         elif option=="remove suffix":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
@@ -243,7 +243,24 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(remove preffix)"]=self.dataset[selected_columns].str.removesuffix(delimeter)
             col2.dataframe(data)
-
+        elif option ==  "trim white spaces on both sides of text":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(strip)"]=self.dataset[selected_columns].str.strip(delimeter)
+            col2.dataframe(data)
+        elif option ==  "trim white spaces on left side of the etxt:
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(lstrip)"]=self.dataset[selected_columns].str.lstrip(delimeter)
+            col2.dataframe(data)
+        elif option ==  "trim white spaces on the right side of the text":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(rstrip)"]=self.dataset[selected_columns].str.rstrip(delimeter)
+            col2.dataframe(data)
       except Exception as e:
         col2.error(e)
         
