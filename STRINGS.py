@@ -49,7 +49,7 @@ class Strings:
           startswith=col2.text_input("Enter deleimeter or any symbol or any character to pand on left and right of the string")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(Centered)-{total_charcters}-{startswith}"]=self.dataset[selected_columns].str.center(total_characters,startswith)
+            data[f"{selected_columns}(Centered)-{total_charcters}-{startswith}"]=self.dataset[selected_columns].str.center(total_charcters,startswith)
             col2.dataframe(data)
         elif option == "Count":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
