@@ -15,7 +15,8 @@ class Strings:
         if option=="Convert First Character To Upper Case":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
-            data=self.dataset[selected_columns].str.capitalize()
+            data=self.dataset.copy(deep=True)
+            data[selected_columns+"Capitalized"]=self.dataset[selected_columns].str.capitalize()
             col2.dataframe(data)
         elif option =="Convert Sentece to Tiltle":
           selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
