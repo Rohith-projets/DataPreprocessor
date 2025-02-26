@@ -10,7 +10,7 @@ class Strings:
     tab1,tab2,tab3=st.tabs(["Basic String Functions","Advanced String Functions","View Data Here"])
     with tab1:
       col1,col2=st.columns([1,2],border=True)
-      option=col1.radio("Select Operations From This Column",["Capitalize","Tiltle","Lower Case","Upper Case","Change Cases","Center String","Count","Ends With","Starts With","find substring strting position from left","find substring starting position from right"])
+      option=col1.radio("Select Operations From This Column",["Capitalize","Tiltle","Lower Case","Upper Case","Change Cases","Center String","Count","Ends With","Starts With","find substring strting position from left","find substring starting position from right","is alpha numeric","is alpha","is decimal","is int","is ascii","is lower","is upper","is printable","is space","is title"])
       try:
         if option=="Capitalize":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
@@ -135,6 +135,82 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.rfind(startswith,"Not Present")
             col2.dataframe(data)
+        # "is title"
+        elif option == "is alpha numeric":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is alpha numeric)"]=self.dataset[selected_columns].str.isalnum()
+            col2.dataframe(data)
+        elif option == "is alpha":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is alpha)"]=self.dataset[selected_columns].str.isalpha()
+            col2.dataframe(data)
+        elif option == "is decimal":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is decimal)"]=self.dataset[selected_columns].str.isdecimal()
+            col2.dataframe(data)
+        elif option == "is int":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isdigit()
+            col2.dataframe(data)
+        elif option == "is ascii":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is alpha numeric)"]=self.dataset[selected_columns].str.isascii()
+            col2.dataframe(data)
+        elif option == "is lower":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is alpha)"]=self.dataset[selected_columns].str.islower()
+            col2.dataframe(data)
+        elif option == "is upper":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is upper)"]=self.dataset[selected_columns].str.isupper()
+            col2.dataframe(data)
+        elif option == "is printable":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
+            col2.dataframe(data)
+        # is space
+      elif option == "is upper":
+        selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+        if col2.button("Apply",use_container_width=True):
+          data=self.dataset.copy(deep=True)
+          data[f"{selected_columns}(is upper)"]=self.dataset[selected_columns].str.isupper()
+          col2.dataframe(data)
+      elif option == "is printable":
+        selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+        if col2.button("Apply",use_container_width=True):
+          data=self.dataset.copy(deep=True)
+          data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
+          col2.dataframe(data)
+      elif option == "is space":
+        selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+        if col2.button("Apply",use_container_width=True):
+          data=self.dataset.copy(deep=True)
+          data[f"{selected_columns}(is upper)"]=self.dataset[selected_columns].str.isupper()
+          col2.dataframe(data)
+      elif option == "is printable":
+        selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+        if col2.button("Apply",use_container_width=True):
+          data=self.dataset.copy(deep=True)
+          data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
+          col2.dataframe(data)
+      
+          
       except Exception as e:
         col2.error(e)
         
