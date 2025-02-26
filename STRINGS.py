@@ -126,14 +126,14 @@ class Strings:
           startswith=col2.text_input("Enter Prefix To Check")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.startswith(startswith)
+            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.find(startswith,"Not Present")
             col2.dataframe(data)
         elif option == "find substring starting position from right":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           startswith=col2.text_input("Enter Sub String To Check")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.rfind(startswith)
+            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.rfind(startswith,"Not Present")
             col2.dataframe(data)
       except Exception as e:
         col2.error(e)
