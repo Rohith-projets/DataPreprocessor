@@ -13,12 +13,12 @@ class Strings:
       option=col1.radio("Select Operations From This Column",["Convert First Character To Upper Case","Convert Sentece to Tiltle","Lower Case","Upper Case","Change Cases"])
       try:
         if option=="Convert First Character To Upper Case":
-          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Capitalized" for x in selected_columns]
             for i in range(len(new_columns)):
-              data[new_columns[i]]=self.dataset[selected_column[i]].str.capitalize()
+              data[new_columns[i]]=self.dataset[selected_columns[i]].str.capitalize()
             col2.dataframe(data)
         elif option =="Convert Sentece to Tiltle":
           selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
