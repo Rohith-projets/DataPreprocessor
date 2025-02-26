@@ -16,7 +16,11 @@ class Strings:
                                                               "find substring starting position from right","is alpha numeric",
                                                               "is alpha","is decimal","is int","is ascii","is lower","is upper",
                                                               "is printable","is space","is title","split","right split","remove preffix",
-                                                              "remove suffix","trim white spaces on both sides of text","trim white spaces on left side of the etxt","trim white spaces on the right side of the text"])
+                                                              "remove suffix","trim white spaces on both sides of text",
+                                                              "trim white spaces on left side of the etxt",
+                                                              "trim white spaces on the right side of the text",
+                                                              "split columns based on left side",
+                                                              "split columns based on right side"])
       try:
         if option=="Capitalize":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
@@ -260,6 +264,20 @@ class Strings:
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(rstrip)"]=self.dataset[selected_columns].str.rstrip(delimeter)
+            col2.dataframe(data)
+        elif option ==  "split columns based on left side":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(lpartition)[0]"]=self.dataset[selected_columns].str.partition(delimeter)[0]
+            data[f"{selected_columns}(lpartition)[2]"]=self.dataset[selected_columns].str.partition(delimeter)[2]
+            col2.dataframe(data)
+        elif option ==  "trim white spaces on the right side of the text":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(lpartition)[0]"]=self.dataset[selected_columns].str.rpartition(delimeter)[0]
+            data[f"{selected_columns}(lpartition)[2]"]=self.dataset[selected_columns].str.rpartition(delimeter)[2]
             col2.dataframe(data)
       except Exception as e:
         col2.error(e)
