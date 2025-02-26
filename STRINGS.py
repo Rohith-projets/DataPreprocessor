@@ -208,9 +208,7 @@ class Strings:
         if col2.button("Apply",use_container_width=True):
           data=self.dataset.copy(deep=True)
           data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
-          col2.dataframe(data)
-      
-          
-      except Exception as e:
-        col2.error(e)
+          col2.dataframe(data)    
+    except Exception as e:
+      col2.error(e)
         
