@@ -178,12 +178,6 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(is upper)"]=self.dataset[selected_columns].str.isupper()
             col2.dataframe(data)
-        elif option == "is printable":
-          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
-          if col2.button("Apply",use_container_width=True):
-            data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
-            col2.dataframe(data)
         elif option == "is upper":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
@@ -194,19 +188,19 @@ class Strings:
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
+            data[f"{selected_columns}(is printable)"]=self.dataset[selected_columns].str.isprintabel()
             col2.dataframe(data)
         elif option == "is space":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(is upper)"]=self.dataset[selected_columns].str.isupper()
+            data[f"{selected_columns}(is space)"]=self.dataset[selected_columns].str.isspace()
             col2.dataframe(data)
-        elif option == "is printable":
+        elif option == "is title":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(is int)"]=self.dataset[selected_columns].str.isprintable()
+            data[f"{selected_columns}(is title)"]=self.dataset[selected_columns].str.istitle()
             col2.dataframe(data)    
       except Exception as e:
         col2.error(e)
