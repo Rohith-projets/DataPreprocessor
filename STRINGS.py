@@ -267,6 +267,7 @@ class Strings:
             col2.dataframe(data)
         elif option ==  "split columns based on left side":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delemeter=col2.text_input("select the delimeter",',')
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(lpartition)[0]"]=self.dataset[selected_columns].str.partition(delimeter)[0]
@@ -274,6 +275,7 @@ class Strings:
             col2.dataframe(data)
         elif option ==  "trim white spaces on the right side of the text":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delemeter=col2.text_input("select the delimeter",',')
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(lpartition)[0]"]=self.dataset[selected_columns].str.rpartition(delimeter)[0]
