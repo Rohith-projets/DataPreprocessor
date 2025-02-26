@@ -47,5 +47,6 @@ class Strings:
             new_columns=[x+"Swap Cased" for x in selected_columns]
             data[new_columns]=self.dataset[selected_columns].str.upper()
             col2.dataframe(data)
-        
+      except Exception as e:
+        st.error(e)
         
