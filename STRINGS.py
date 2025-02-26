@@ -10,7 +10,13 @@ class Strings:
     tab1,tab2,tab3=st.tabs(["Basic String Functions","Advanced String Functions","View Data Here"])
     with tab1:
       col1,col2=st.columns([1,2],border=True)
-      option=col1.radio("Select Operations From This Column",["Capitalize","Tiltle","Lower Case","Upper Case","Change Cases","Center String","Count","Ends With","Starts With","find substring strting position from left","find substring starting position from right","is alpha numeric","is alpha","is decimal","is int","is ascii","is lower","is upper","is printable","is space","is title"])
+      option=col1.radio("Select Operations From This Column",["Capitalize","Tiltle","Lower Case","Upper Case",
+                                                              "Change Cases","Center String","Count","Ends With",
+                                                              "Starts With","find substring strting position from left",
+                                                              "find substring starting position from right","is alpha numeric",
+                                                              "is alpha","is decimal","is int","is ascii","is lower","is upper",
+                                                              "is printable","is space","is title","split","left split","right split","remove preffix",
+                                                              "remove suffix"])
       try:
         if option=="Capitalize":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
@@ -135,7 +141,6 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.rfind(startswith,"Not Present")
             col2.dataframe(data)
-        # "is title"
         elif option == "is alpha numeric":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
@@ -202,6 +207,43 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(is title)"]=self.dataset[selected_columns].str.istitle()
             col2.dataframe(data)    
+        #"left split',"right split","remove preffix","remove suffix"
+        elif option=="split":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delimeter=col2.text_input("Specify the delimeter",',')
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(split)"]=self.dataset[selected_columns].str.split(delimeter)
+            col2.dataframe(data)    
+        elif option=="left split":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delimeter=col2.text_input("Specify the delimeter",',')
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(lsplit)"]=self.dataset[selected_columns].str.lsplit(delimeter)
+            col2.dataframe(data)   
+        elif option=="right split":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delimeter=col2.text_input("Specify the delimeter",',')
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(rsplit)"]=self.dataset[selected_columns].str.rsplit(delimeter)
+            col2.dataframe(data)
+        elif option=="remove preffix":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delimeter=col2.text_input("Specify the prefix to remove")
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(remove preffix)"]=self.dataset[selected_columns].str.removepreffix(delimeter)
+            col2.dataframe(data)
+        elif option=="remove suffix":
+          selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
+          delimeter=col2.text_input("Specify the prefix to remove")
+          if col2.button("Apply",use_container_width=True):
+            data=self.dataset.copy(deep=True)
+            data[f"{selected_columns}(remove preffix)"]=self.dataset[selected_columns].str.removesuffix(delimeter)
+            col2.dataframe(data)
+
       except Exception as e:
         col2.error(e)
         
