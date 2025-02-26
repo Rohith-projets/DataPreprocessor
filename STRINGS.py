@@ -13,35 +13,35 @@ class Strings:
       option=col1.radio("Select Operations From This Column",["Convert First Character To Upper Case","Convert Sentece to Tiltle","Lower Case","Upper Case","Change Cases"])
       try:
         if option=="Convert First Character To Upper Case":
-          selected_columns=col2.miultiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Capitalized" for x in selected_columns]
             data[new_columns]=self.dataset[selected_columns].str.capitalize()
             col2.dataframe(data)
         elif option =="Convert Sentece to Tiltle":
-          selected_columns=col2.miultiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Titled" for x in selected_columns]
             data[new_columns]=self.dataset[selected_columns].str.title()
             col2.dataframe(data)
         elif option == "Lower Case":
-          selected_columns=col2.miultiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Lowered" for x in selected_columns]
             data[new_columns]=self.dataset[selected_columns].str.casefold()
             col2.dataframe(data)
         elif option == "Upper Case":
-          selected_columns=col2.miultiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Uppered" for x in selected_columns]
             data[new_columns]=self.dataset[selected_columns].str.upper()
             col2.dataframe(data)
         elif option == "Change Cases":
-          selected_columns=col2.miultiselect("Select Columns",self.dataset.columns.tolist())
+          selected_columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
             new_columns=[x+"Swap Cased" for x in selected_columns]
