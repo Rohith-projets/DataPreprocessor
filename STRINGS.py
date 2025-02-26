@@ -249,7 +249,7 @@ class Strings:
             data=self.dataset.copy(deep=True)
             data[f"{selected_columns}(strip)"]=self.dataset[selected_columns].str.strip(delimeter)
             col2.dataframe(data)
-        elif option ==  "trim white spaces on left side of the etxt:
+        elif option ==  "trim white spaces on left side of the etxt":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
