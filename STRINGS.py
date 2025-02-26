@@ -48,5 +48,5 @@ class Strings:
             data[new_columns]=self.dataset[selected_columns].str.upper()
             col2.dataframe(data)
       except Exception as e:
-        st.error(e)
+        col2.error(e)
         
