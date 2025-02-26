@@ -70,7 +70,7 @@ class Strings:
           startswith=col2.text_input("Enter Prefix To Check")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.swapcase(startswith)
+            data[f"{selected_columns}(Starts With)-{startswith}"]=self.dataset[selected_columns].str.startswith(startswith)
             col2.dataframe(data)
       except Exception as e:
         col2.error(e)
