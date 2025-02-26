@@ -63,7 +63,7 @@ class Strings:
           startswith=col2.text_input("Enter Suffix To Check")
           if col2.button("Apply",use_container_width=True):
             data=self.dataset.copy(deep=True)
-            data[f"{selected_columns}(endswith)-{startswith}"]=self.dataset[selected_columns].str.endswith(endswith)
+            data[f"{selected_columns}(endswith)-{startswith}"]=self.dataset[selected_columns].str.endswith(startswith)
             col2.dataframe(data)
         elif option == "Starts With":
           selected_columns=col2.selectbox("Select Columns",self.dataset.columns.tolist())
