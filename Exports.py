@@ -16,7 +16,7 @@ class Exports:
             options = col1.radio("Options", [
                 "To ORC", "To Parquet", "To Pickle", "To Feather", "To CSV", "To Excel",
                 "To SQL", "To HDF5", "To JSON", "To Dict", "To HTML", "To LaTeX", 
-                "To Stata", "To Google BigQuery", "To Records", "To String", 
+                "To Stata", 
                 "To Clipboard", "To Markdown"
             ])
 
@@ -96,12 +96,6 @@ class Exports:
                 file_name = "exported_data.dta"
                 self.dataset.to_stata(file_buffer)
                 mime_type = "application/octet-stream"
-
-            elif options == "To Google BigQuery":
-                col2.warning("Google BigQuery export requires API setup. Implement as needed.")
-
-            elif options == "To Records":
-                col2.write(self.dataset.to_records(index=False))
 
             elif options == "To String":
                 col2.text(self.dataset.to_string())
