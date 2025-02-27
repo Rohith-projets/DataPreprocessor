@@ -3,10 +3,6 @@ import streamlit as st
 import pandas as pd
 from textblob import download_corpora
 
-if "download corpus" not in st.session_state:
-  st.session_state["download corpus"]=download_corpora()
-
-
 class Strings:
   def __init__(self,dataset):
     self.dataset=dataset
@@ -288,7 +284,8 @@ class Strings:
       except Exception as e:
         col2.error(e)
     with tab2:
-      if col2.link_button("www.google.com","Click Here To Navigate To Another Website Where You can Perform Most Advanced String Functions"):
-        pass
+      if col2.link_button("Click Here To Navigate To Another Website Where You can Perform Most Advanced String Functions",
+                         "https://natural-language-proceappr-rexublsuqse8pxgr2of6f8.streamlit.app/"):
+        col2.subheader("You redirected")
       
   
