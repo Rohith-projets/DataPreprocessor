@@ -64,7 +64,7 @@ selected_data = st.selectbox("Please select the dataframe to perform operation",
 with st.sidebar:
     options = option_menu(
         "Select the operation to perform",
-        ["View Data","Delete Data","Optimize DataFrame","Attributes","Dashboard", "Compare DataFrames","Modifications","Filterations","Mathematical & Statistical",
+        ["About The App","View Data","Delete Data","Optimize DataFrame","Attributes","Dashboard", "Compare DataFrames","Modifications","Filterations","Mathematical & Statistical",
           "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI","Exports"],
         icons=["eye","eraser","info-circle","info-circle", "columns","columns","search","columns", "pen", "pencil-square",
                "trash", "tools", "book","robot","pencil","sun","moon"],
@@ -73,7 +73,9 @@ with st.sidebar:
     )
 
 # Perform operation based on selected option
-if options=="View Data":
+if option=="About The App":
+    pass
+elif options=="View Data":
     st.subheader("Your Data",divider='blue')
     if selected_data:
         df = st.session_state["allData"][selected_data]
