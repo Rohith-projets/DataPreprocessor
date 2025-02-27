@@ -74,7 +74,7 @@ with st.sidebar:
     )
 
 # Perform operation based on selected option
-if option=="About The App":
+if options=="About The App":
     About().display()
 elif options=="View Data":
     st.subheader("Your Data",divider='blue')
