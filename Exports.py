@@ -105,13 +105,16 @@ class Exports:
                 mime_type = "text/markdown"
 
             # Show Download Button if applicable
+            col2.subheader("Click The Button Below To Download The Data",divider='blue')
             if file_name and not show_inputs:
                 file_buffer.seek(0)  # Reset pointer
                 col2.download_button(
                     label="Download File",
                     data=file_buffer,
                     file_name=file_name,
-                    mime=mime_type
+                    mime=mime_type,
+                    use_container_width=True,
+                    type='primary'
                 )
 
         with tab2:
