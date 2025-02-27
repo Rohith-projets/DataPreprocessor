@@ -92,8 +92,18 @@ class Exports:
 
             elif options == "To Stata":
                 file_name = "exported_data.dta"
-                self.dataset.to_stata(file_buffer)
-                mime_type = "application/octet-stream"
+                
+                # Ensure column names are valid (max 32 chars)
+                self.dataset.columns = [col[:32] for col in self.dataset.columns]
+            
+                # Truncate string columns to 244 characters (Stata limit)
+                for col in self.dataset.select_dtypes(include=['object']):
+                    self.dataset[col] = self.dataset[col].astype(str).str[:244]
+            
+                # Convert to Stata format and write to buffer
+                self.dataset.to_stata(file_buffer, write_index=False)
+                file_buffer.seek(0)  # Reset buffer position
+                mime_type = "application/x-stata"
 
             elif options == "To String":
                 col2.text(self.dataset.to_string())
