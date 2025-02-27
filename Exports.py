@@ -14,7 +14,7 @@ class Exports:
             col1, col2 = st.columns([1, 2], border=True)
 
             options = col1.radio("Options", [
-                "To ORC", "To Parquet", "To Pickle", "To Feather", "To CSV", "To Excel",
+                "To ORC", "To Parquet", "To Pickle", "To Feather", "To CSV",
                 "To SQL", "To HDF5", "To JSON", "To Dict", "To HTML", "To LaTeX", 
                 "To Stata", 
                 "To Clipboard", "To Markdown"
@@ -49,12 +49,6 @@ class Exports:
                 file_name = "exported_data.csv"
                 self.dataset.to_csv(file_buffer, index=False)
                 mime_type = "text/csv"
-
-            elif options == "To Excel":
-                file_name = "exported_data.xlsx"
-                with pd.ExcelWriter(file_buffer, engine='xlsxwriter') as writer:
-                    self.dataset.to_excel(writer, sheet_name='Sheet1', index=False)
-                mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
             elif options == "To SQL":
                 show_inputs = True
