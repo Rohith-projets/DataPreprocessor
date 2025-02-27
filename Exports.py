@@ -115,10 +115,10 @@ class Exports:
                 clipboard_text = self.dataset.to_csv(sep="\t", index=False)
             
                 # Show data in a text box for manual copying
-                st.text_area("Copy the Data Below:", clipboard_text, height=300)
+                col2.text_area("Copy the Data Below:", clipboard_text, height=300)
             
                 # Provide a download button instead
-                st.download_button(
+                col2.download_button(
                     label="Download as Text File",
                     data=clipboard_text,
                     file_name=file_name,
