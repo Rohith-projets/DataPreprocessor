@@ -17,7 +17,7 @@ class Exports:
                 "To ORC", "To Parquet", "To Pickle", "To Feather", "To CSV",
                 "To SQL", "To HDF5", "To JSON", "To Dict", "To HTML", "To LaTeX", 
                 "To Stata", 
-                "To Clipboard", "To Markdown"
+                "To Clipboard"
             ])
 
             file_buffer = io.BytesIO()  # In-memory storage
@@ -124,13 +124,6 @@ class Exports:
                     file_name=file_name,
                     mime="text/plain"
                 )
-
-            elif options == "To Markdown":
-                file_name = "exported_data.md"
-                markdown_data = self.dataset.to_markdown()
-                file_buffer.write(markdown_data.encode())  # Convert string to bytes
-                mime_type = "text/markdown"
-
             # Show Download Button if applicable
             col2.subheader("Click The Button Below To Download The Data",divider='blue')
             if file_name and not show_inputs:
