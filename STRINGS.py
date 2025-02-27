@@ -284,8 +284,7 @@ class Strings:
       except Exception as e:
         col2.error(e)
     with tab2:
-      if st.link_button("Click Here To Navigate To Another Website Where You can Perform Most Advanced String Functions",
-                         "https://natural-language-proceappr-rexublsuqse8pxgr2of6f8.streamlit.app/"):
-        st.subheader("You redirected")
+      st.link_button("Click Here To Navigate To Another Website Where You can Perform Most Advanced String Functions",
+                         "https://natural-language-proceappr-rexublsuqse8pxgr2of6f8.streamlit.app/")
       
   
