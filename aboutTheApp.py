@@ -4,9 +4,8 @@ import time
 from streamlit_extras.metric_cards import style_metric_cards
 
 class About:
-    def __init__(self, df: pd.DataFrame):
-        self.dataset = df
-
+    def __init__(self):
+        pass
     def stream_text(self, text):
         for word in text.split(" "):
             yield word + " "
