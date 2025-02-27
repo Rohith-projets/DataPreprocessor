@@ -13,7 +13,7 @@ class About:
 
     def display(self):
         # Display a high-quality image as a banner
-        st.image("https://source.unsplash.com/1600x400/?technology,data", use_column_width=True)
+        st.image("./images/ba.png", use_column_width=True)
         
         # Title and Introduction
         st.header("About The App")
