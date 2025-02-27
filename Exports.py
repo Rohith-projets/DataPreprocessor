@@ -75,10 +75,12 @@ class Exports:
 
             elif options == "To Dict":
                 col2.json(self.dataset.to_dict())
-
+                
             elif options == "To HTML":
                 file_name = "exported_data.html"
-                self.dataset.to_html(file_buffer)
+                html_data = self.dataset.to_html()  # Generate HTML string
+                file_buffer.write(html_data.encode("utf-8"))  # Convert string to bytes
+                file_buffer.seek(0)  # Reset buffer position
                 mime_type = "text/html"
 
             elif options == "To LaTeX":
