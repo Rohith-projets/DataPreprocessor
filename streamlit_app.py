@@ -16,6 +16,7 @@ from MACHINELEARNING import *
 from OptimizeData import OptimizeData
 from GenAI import GenAI
 from STRINGS import *
+from Exports import *
 # Initialize session state for storing dataframes
 if "allData" not in st.session_state:
     st.session_state["allData"] = {}
@@ -64,7 +65,7 @@ with st.sidebar:
     options = option_menu(
         "Select the operation to perform",
         ["View Data","Delete Data","Optimize DataFrame","Attributes","Dashboard", "Compare DataFrames","Modifications","Filterations","Mathematical & Statistical",
-          "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI"],
+          "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI","Exports"],
         icons=["eye","eraser","info-circle","info-circle", "columns","columns","search","columns", "pen", "pencil-square", "trash", "tools", "book","robot","pencil","sun"],
         menu_icon='gear',
         default_index=0
@@ -159,4 +160,8 @@ elif options=="String Manipulation":
         df = st.session_state["allData"][selected_data]
         attributes = Strings(df)
         attributes.display()
-    
+elif options=="Exports":
+    if selected_data:
+        df = st.session_state["allData"][selected_data]
+        attributes = Exports(df)
+        attributes.display()
