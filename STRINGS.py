@@ -284,7 +284,7 @@ class Strings:
       except Exception as e:
         col2.error(e)
     with tab2:
-      col1, col2 = st.columns([1, 2], gap="medium")
+      col1, col2 = st.columns([1, 2],border=True)
     
       radio_options = col1.radio("Advanced Options", [
           "Extract Tags", "Extract Noun Phrases", "Sentiment Analysis", "Singularize",
@@ -292,7 +292,7 @@ class Strings:
           "Word Counts", "N Grams", "Text Classification"
       ])
       
-      selected_column = col2.selectbox("Select Column", dataset.columns)
+      selected_column = col2.selectbox("Select Column", self.dataset.columns)
       
       if col2.button("Apply", use_container_width=True, type='primary'):
           data = dataset.copy()
