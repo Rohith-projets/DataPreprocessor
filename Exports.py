@@ -109,8 +109,21 @@ class Exports:
                 col2.text(self.dataset.to_string())
 
             elif options == "To Clipboard":
-                self.dataset.to_clipboard()
-                col2.success("Copied to clipboard!")
+                file_name = "exported_data_clipboard.txt"
+            
+                # Convert dataframe to a clipboard-friendly format (TSV)
+                clipboard_text = self.dataset.to_csv(sep="\t", index=False)
+            
+                # Show data in a text box for manual copying
+                st.text_area("Copy the Data Below:", clipboard_text, height=300)
+            
+                # Provide a download button instead
+                st.download_button(
+                    label="Download as Text File",
+                    data=clipboard_text,
+                    file_name=file_name,
+                    mime="text/plain"
+                )
 
             elif options == "To Markdown":
                 file_name = "exported_data.md"
