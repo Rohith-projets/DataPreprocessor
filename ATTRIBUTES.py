@@ -9,101 +9,108 @@ class ATTRIBUTES:
         self.dataframe = dataframe
 
     def display(self):
-        col1, col2 = st.columns([1, 2],border=True)
-        # Radio buttons in column 1
-        operations = [
-            "See Indexes",
-            "See Columns",
-            "See Columns Data Types",
-            "Information On DataSet",
-            "Create Sub Data With Similer Data Types",
-            "See Data Set Values",
-            "See Axes",
-            "Dataset Dimension",
-            "Data Set Size",
-            "(Columns,Rows)",
-            "memory_usage",
-            "Is Data Frame Empty?",
-            "Add Column Names",
-            'Find Minimum - Maximum Values',
-            "Find Unique Values",
-            "Find Number Of Unique Values in A Column",
-            "Find Value Counts",
-            "Covert Data Types",
-            "Find Index Which Has Maximum Value",
-            "Find Mininum Index Which Has Minimum Value",
-            "Find Largest Values",
-            "Find Smallest Values",
-            "Transpose A Data Frame"
-        ]
-        selected_operation = col1.radio("Select an operation:", operations)
-
-        # Display result in column 2
-        try:
-            if selected_operation == "See Indexes":
-                col2.dataframe(self.dataframe.index)
-            elif selected_operation == "See Columns":
-                col2.write(list(self.dataframe.columns))
-            elif selected_operation == "See Columns Data Types":
-                col2.dataframe(self.dataframe.dtypes)
-            elif selected_operation == "Information On DataSet":
-                col2.write(self.dataframe.info(verbose=True,show_counts=True))
-            elif selected_operation == "Create Sub Data With Similer Data Types":
-                # Display available datatypes in a multiselect
-                available_dtypes = list(self.dataframe.dtypes.unique())
-                selected_dtypes = col2.multiselect("Select datatypes to include:", available_dtypes)
-                if selected_dtypes:
-                    filtered_df = self.dataframe.select_dtypes(include=selected_dtypes)
-                    col2.dataframe(filtered_df)
-            elif selected_operation == "See Data Set Values":
-                col2.write(self.dataframe.values)
-            elif selected_operation == "See Axes":
-                col2.write(self.dataframe.axes)
-            elif selected_operation == "Dataset Dimension":
-                col2.write(self.dataframe.ndim)
-            elif selected_operation == "Data Set Size":
-                col2.write(self.dataframe.size)
-            elif selected_operation == "(Columns,Rows)":
-                col2.write(self.dataframe.shape)
-            elif selected_operation == "memory_usage":
-                col2.write(self.dataframe.memory_usage())
-            elif selected_operation == "Is Data Frame Empty?":
-                col2.write(self.dataframe.empty)
-            elif selected_operation == "Add Column Names":
-                values=col2.text_input("Please Input the column names with ',' as seperator")
-                if col2.button("Add These Column Names",use_container_width=True,type='primary'):
-                    if values:
-                        values=values.split(',')
-                        if self.dataframe.shape[1] == len(values):
-                            dataframe=self.dataframe.copy(deep=True)
-                            dataframe.columns=values
-                            col2.subheader("Here Is the sample Data",divider='blue')
-                            col2.dataframe(dataframe)
-                            st.session_state['allData'][f"Stage 1 - Add Column Names -{values}"]=dataframe
-                        else:
-                            col2.warning(f"Specified column names does not match with the number of columns present in dataset {self.dataframe.shape[1]}")
-            elif selected_operation=='Find Minimum - Maximum Values':
-                self.min_max(col2)
-            elif selected_operation == "Find Unique Values":
-                self.unique(col2)
-            elif selected_operation=="Find Number Of Unique Values in A Column":
-                self.nunique(col2)
-            elif selected_operation == "Find Value Counts":
-                self.value_counts(col2)
-            elif selected_operation == "Covert Data Types":
-                self.convert_dtype(col2)
-            elif selected_operation == "Find Index Which Has Maximum Value":
-                self.idx_max(col2)
-            elif selected_operation == "Find Mininum Index Which Has Minimum Value":
-                self.idx_min(col2)
-            elif selected_operation == "Find Largest Values":
-                self.nlargest(col2)
-            elif selected_operation == "Find Smallest Values":
-                self.nsmallest(col2)
-            elif selected_operation == "Transpose A Data Frame":
-                self.transpose(col2)
-        except Exception as e:
-            col2.error(e)
+        tab1,tab2=st.tabs(["Perform","Learn"])
+        with tab1:
+            col1, col2 = st.columns([1, 2],border=True)
+            # Radio buttons in column 1
+            operations = [
+                "See Indexes",
+                "See Columns",
+                "See Columns Data Types",
+                "Information On DataSet",
+                "Create Sub Data With Similer Data Types",
+                "See Data Set Values",
+                "See Axes",
+                "Dataset Dimension",
+                "Data Set Size",
+                "(Columns,Rows)",
+                "memory_usage",
+                "Is Data Frame Empty?",
+                "Add Column Names",
+                'Find Minimum - Maximum Values',
+                "Find Unique Values",
+                "Find Number Of Unique Values in A Column",
+                "Find Value Counts",
+                "Covert Data Types",
+                "Find Index Which Has Maximum Value",
+                "Find Mininum Index Which Has Minimum Value",
+                "Find Largest Values",
+                "Find Smallest Values",
+                "Transpose A Data Frame"
+            ]
+            selected_operation = col1.radio("Select an operation:", operations)
+    
+            # Display result in column 2
+            try:
+                if selected_operation == "See Indexes":
+                    col2.dataframe(self.dataframe.index)
+                elif selected_operation == "See Columns":
+                    col2.write(list(self.dataframe.columns))
+                elif selected_operation == "See Columns Data Types":
+                    col2.dataframe(self.dataframe.dtypes)
+                elif selected_operation == "Information On DataSet":
+                    col2.write(self.dataframe.info(verbose=True,show_counts=True))
+                elif selected_operation == "Create Sub Data With Similer Data Types":
+                    # Display available datatypes in a multiselect
+                    available_dtypes = list(self.dataframe.dtypes.unique())
+                    selected_dtypes = col2.multiselect("Select datatypes to include:", available_dtypes)
+                    if selected_dtypes:
+                        filtered_df = self.dataframe.select_dtypes(include=selected_dtypes)
+                        col2.dataframe(filtered_df)
+                elif selected_operation == "See Data Set Values":
+                    col2.write(self.dataframe.values)
+                elif selected_operation == "See Axes":
+                    col2.write(self.dataframe.axes)
+                elif selected_operation == "Dataset Dimension":
+                    col2.write(self.dataframe.ndim)
+                elif selected_operation == "Data Set Size":
+                    col2.write(self.dataframe.size)
+                elif selected_operation == "(Columns,Rows)":
+                    col2.write(self.dataframe.shape)
+                elif selected_operation == "memory_usage":
+                    col2.write(self.dataframe.memory_usage())
+                elif selected_operation == "Is Data Frame Empty?":
+                    col2.write(self.dataframe.empty)
+                elif selected_operation == "Add Column Names":
+                    values=col2.text_input("Please Input the column names with ',' as seperator")
+                    if col2.button("Add These Column Names",use_container_width=True,type='primary'):
+                        if values:
+                            values=values.split(',')
+                            if self.dataframe.shape[1] == len(values):
+                                dataframe=self.dataframe.copy(deep=True)
+                                dataframe.columns=values
+                                col2.subheader("Here Is the sample Data",divider='blue')
+                                col2.dataframe(dataframe)
+                                st.session_state['allData'][f"Stage 1 - Add Column Names -{values}"]=dataframe
+                            else:
+                                col2.warning(f"Specified column names does not match with the number of columns present in dataset {self.dataframe.shape[1]}")
+                elif selected_operation=='Find Minimum - Maximum Values':
+                    self.min_max(col2)
+                elif selected_operation == "Find Unique Values":
+                    self.unique(col2)
+                elif selected_operation=="Find Number Of Unique Values in A Column":
+                    self.nunique(col2)
+                elif selected_operation == "Find Value Counts":
+                    self.value_counts(col2)
+                elif selected_operation == "Covert Data Types":
+                    self.convert_dtype(col2)
+                elif selected_operation == "Find Index Which Has Maximum Value":
+                    self.idx_max(col2)
+                elif selected_operation == "Find Mininum Index Which Has Minimum Value":
+                    self.idx_min(col2)
+                elif selected_operation == "Find Largest Values":
+                    self.nlargest(col2)
+                elif selected_operation == "Find Smallest Values":
+                    self.nsmallest(col2)
+                elif selected_operation == "Transpose A Data Frame":
+                    self.transpose(col2)
+            except Exception as e:
+                col2.error(e)
+        with tab2:
+            col1=st.columns(1,border=True)
+            col1.subheader("Video Documentation Given Below",divider='blue')
+            col1.video("https://youtu.be/Ac6kWTDg02c",use_container_width=True)
+        
     def min_max(self,col2):
         option=col2.radio("Selecte the columns on which you want to perform minimum and maximum values",["All Columns","Specific Columns"])
         if option == "All Columns":
