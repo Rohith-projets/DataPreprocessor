@@ -4,7 +4,7 @@ import pandas as pd
 from textblob import download_corpora
 
 if "download corpus" not in st.session_state:
-  st.session_state["download corpus"]=download_corpora
+  st.session_state["download corpus"]=download_corpora()
 
 
 class Strings:
