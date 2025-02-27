@@ -1,6 +1,8 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 import pandas as pd
+import chardet
+import io
 from ATTRIBUTES import ATTRIBUTES
 from COMPARE import COMPARE
 from accessModify import *
@@ -18,12 +20,41 @@ from STRINGS import *
 if "allData" not in st.session_state:
     st.session_state["allData"] = {}
 
-# File uploader for CSV files
-st.header("Data Preprocessor",divider='blue')
+def detect_encoding_and_read(file):
+    # Read a sample of the file for encoding detection
+    raw_data = file.read()
+    file.seek(0)  # Reset pointer to beginning after reading
+    
+    result = chardet.detect(raw_data)  # Detect encoding
+    encoding = result['encoding']
+    confidence = result['confidence']
+    
+    if encoding is None:
+        encoding = 'utf-8'  # Fallback encoding if detection fails
+    
+    try:
+        # Try reading with detected encoding
+        df = pd.read_csv(io.StringIO(raw_data.decode(encoding)), encoding=encoding)
+    except Exception:
+        # If detected encoding fails, fall back to 'utf-8'
+        df = pd.read_csv(io.StringIO(raw_data.decode('utf-8', errors='ignore')), encoding='utf-8')
+    
+    return df, encoding, confidence
+
+# Streamlit UI
+st.header("Data Preprocessor", divider='blue')
+
 dataframe = st.sidebar.file_uploader("Upload file", type=['csv'])
+
 if dataframe:
-    if "readed_csv" not in st.session_state["allData"]:
-        st.session_state["allData"]["readed_csv"] = pd.read_csv(dataframe)
+    if "readed_csv" not in st.session_state.get("allData", {}):
+        df, encoding, confidence = detect_encoding_and_read(dataframe)
+        if "allData" not in st.session_state:
+            st.session_state["allData"] = {}
+        st.session_state["allData"]["readed_csv"] = df
+        st.write(f"Detected Encoding: {encoding} (Confidence: {confidence:.2f})")
+        st.dataframe(df.head())
+
 
 # Selectbox to choose the dataframe for operations
 selected_data = st.selectbox("Please select the dataframe to perform operation", st.session_state["allData"].keys())
