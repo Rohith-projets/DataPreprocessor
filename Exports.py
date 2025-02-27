@@ -85,8 +85,10 @@ class Exports:
 
             elif options == "To LaTeX":
                 file_name = "exported_data.tex"
-                self.dataset.to_latex(file_buffer)
-                mime_type = "application/x-latex"
+                latex_data = self.dataset.to_latex()  # Generate LaTeX string
+                file_buffer.write(latex_data.encode("utf-8"))  # Convert string to bytes
+                file_buffer.seek(0)  # Reset buffer position
+                mime_type = "text/x-tex"
 
             elif options == "To Stata":
                 file_name = "exported_data.dta"
