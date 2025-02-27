@@ -17,6 +17,7 @@ from OptimizeData import OptimizeData
 from GenAI import GenAI
 from STRINGS import *
 from Exports import *
+from aboutTheApp import About
 # Initialize session state for storing dataframes
 if "allData" not in st.session_state:
     st.session_state["allData"] = {}
@@ -74,7 +75,7 @@ with st.sidebar:
 
 # Perform operation based on selected option
 if option=="About The App":
-    pass
+    About().display()
 elif options=="View Data":
     st.subheader("Your Data",divider='blue')
     if selected_data:
