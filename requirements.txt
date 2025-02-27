@@ -19,4 +19,3 @@ openai==0.28
 tiktoken
 pyyaml
 textblob
-xlswriter
