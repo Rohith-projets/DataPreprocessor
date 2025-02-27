@@ -46,7 +46,7 @@ class ATTRIBUTES:
         elif selected_operation == "See Columns Data Types":
             col2.dataframe(self.dataframe.dtypes)
         elif selected_operation == "Information On DataSet":
-            col2.write(self.dataframe.info(verbose=True))
+            col2.write(self.dataframe.info(verbose=True,show_counts=True))
         elif selected_operation == "Create Sub Data With Similer Data Types":
             # Display available datatypes in a multiselect
             available_dtypes = list(self.dataframe.dtypes.unique())
