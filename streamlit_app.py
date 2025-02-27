@@ -67,7 +67,7 @@ with st.sidebar:
         ["View Data","Delete Data","Optimize DataFrame","Attributes","Dashboard", "Compare DataFrames","Modifications","Filterations","Mathematical & Statistical",
           "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI","Exports"],
         icons=["eye","eraser","info-circle","info-circle", "columns","columns","search","columns", "pen", "pencil-square",
-               "trash", "tools", "book","robot","pencil","sun","message"],
+               "trash", "tools", "book","robot","pencil","sun","write"],
         menu_icon='gear',
         default_index=0
     )
