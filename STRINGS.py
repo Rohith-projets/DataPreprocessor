@@ -295,7 +295,7 @@ class Strings:
       selected_column = col2.selectbox("Select Column", self.dataset.columns)
       
       if col2.button("Apply", use_container_width=True, type='primary'):
-          data = dataset.copy()
+          data = self.dataset.copy()
           
           if radio_options == "Extract Tags":
               data[f"{selected_column} (Tags)"] = data[selected_column].apply(lambda x: TextBlob(x).tags)
