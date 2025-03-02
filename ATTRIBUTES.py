@@ -108,7 +108,7 @@ class ATTRIBUTES:
                 col2.error(e)
         with tab2:
             st.subheader("Video Documentation Given Below",divider='blue')
-            st.video("https://youtu.be/Ac6kWTDg02c",use_container_width=True)
+            st.video("https://youtu.be/Ac6kWTDg02c")
         
     def min_max(self,col2):
         option=col2.radio("Selecte the columns on which you want to perform minimum and maximum values",["All Columns","Specific Columns"])
