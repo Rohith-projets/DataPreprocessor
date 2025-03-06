@@ -13,7 +13,7 @@ class Ml:
     self.pandas_methods=PandasMethods(df)
     self.univariate_imputers=UnivariateImputers(df)
     self.data_cleaners=DataCleaners(df)
-    self.encodersObject=Encoders(df)
+    self.encoders=Encoders(df)
   def display(self):
     tab1,tab2,tab3=st.tabs(["Perfrom Operations","View Operations","Delete Memory"])
     with tab1:
@@ -21,11 +21,21 @@ class Ml:
       options=col1.radio("Operation You Want To Perform",["Missing Data","Encode Target Variables",
                                                           "Discritization/Binning","Outlier detection","Varience Stabilizing Transformations"])
       if options=="Encode Target Variables":
-        encoders_dict={"Target","WOE","Summary","Sum","Rank Hot","Quantile","Polynomial",
-                       "Ordinal","One Hot","Leave One Out","M Estimate","James Stein","Helmert",
-                       "Hashing","Gray","Generalized Linear Mixed Model","Count","Catboost","Binary","Base"}
-        option_mode=col2.selectbox("Select the encoding Technique",encoders_list)
-        
+        encoder_dict = {"Base": self.encoders.apply_basen_encoder,"Binary": self.encoders.apply_binary_encoder,
+        "Catboost": self.encoders.apply_catboost_encoder,"Count": self.encoders.apply_count_encoder,
+        "Generalized Linear Mixed Model": self.encoders.generalized_linear_mixed_model,"Gray": self.encoders.apply_gray_encoder,
+        "Hashing": self.encoders.apply_hashing_encoder,"Helmert": self.encoders.apply_helmert_encoder,
+        "James Stein": self.encoders.apply_james_stein_encoder,"Leave One Out": self.encoders.ply_leave_one_out_encoder,
+        "M Estimate": self.encoders.apply_m_estimate_encoder,"One Hot": self.encoders.apply_one_hot_encoder,
+        "Ordinal": self.encoders.apply_ordinal_encoder,"Polynomial": self.encoders.apply_polynomial_encoder,
+        "Quantile": self.encoders.apply_quantile_encoder,"Rank Hot": self.encoders.apply_rankhot_encoder,
+        "Sum": self.encoders.apply_sum_encoder,"Summary": self.encoders.apply_summary_encoder,
+        "Target": self.encoders.apply_target_encoder,"WOE": self.encoders.apply_woe_encoder,
+        }
+        option_mode=col2.selectbox("Select the encoding Technique",encoder_dict.keys())
+        if option_mode:
+          with col2:
+            option_mode[option_mode]()
       if options=="Missing Data":
         option_mode=col2.selectbox("Select any one operation",["Detect Missing Values","Total Missing Values","Visualize Missing Values","Impute Missing Values"])
         if option_mode=="Detect Missing Values":
