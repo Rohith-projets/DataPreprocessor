@@ -28,7 +28,7 @@ class Updates:
       copied_dataframe=self.dataset.copy(deep=True)
       query=col2.text_area("Write Your Query")
       if col2.checkbox("Find Information") and query:
-        edited_dataframe=col2.data_editor(copied_dataframe.query(eval(query)))
+        edited_dataframe=col2.data_editor(copied_dataframe.query(query))
         st.session_state['allData']["Stage - Updates - Edited Datframe - Based On Query"]=edited_dataframe
     except Exception as e:
       col2.info(e)
