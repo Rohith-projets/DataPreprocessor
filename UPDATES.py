@@ -62,7 +62,7 @@ class Updates:
           new_values=new_values.split(',')
           if len(old_values)==len(new_values):
             mapper[i]={old_values[i]:new_values[i] for i in range(len(old_values))}
-            copied_data=copied_data.replace(mapper,axis=1)
+            copied_data=copied_data.replace(mapper)
             st.session_state['allData'][f'Stage - Upadtes - Replace - {mapper}']=copied_data
           else:
             col2.error("old values length must be match with new values")
