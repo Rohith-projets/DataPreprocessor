@@ -62,10 +62,10 @@ class Updates:
             mapper[selected_columns]={old_values[i]:new_values[i] for i in range(len(old_values))}
             copied_data=copied_data.replace(mapper)
             st.session_state['allData'][f'Stage - Upadtes - Replace - {mapper}']=copied_data
+            col2.dataframe(copied_data)
           else:
             col2.error("old values length must be match with new values")
           col2.divider()
-        col2.dataframe(copied_data)
           
 
         
