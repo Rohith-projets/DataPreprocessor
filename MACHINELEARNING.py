@@ -25,7 +25,7 @@ class Ml:
         "Catboost": self.encoders.apply_catboost_encoder,"Count": self.encoders.apply_count_encoder,
         "Generalized Linear Mixed Model": self.encoders.generalized_linear_mixed_model,"Gray": self.encoders.apply_gray_encoder,
         "Hashing": self.encoders.apply_hashing_encoder,"Helmert": self.encoders.apply_helmert_encoder,
-        "James Stein": self.encoders.apply_james_stein_encoder,"Leave One Out": self.encoders.ply_leave_one_out_encoder,
+        "James Stein": self.encoders.apply_james_stein_encoder,"Leave One Out": self.encoders.apply_leave_one_out_encoder,
         "M Estimate": self.encoders.apply_m_estimate_encoder,"One Hot": self.encoders.apply_one_hot_encoder,
         "Ordinal": self.encoders.apply_ordinal_encoder,"Polynomial": self.encoders.apply_polynomial_encoder,
         "Quantile": self.encoders.apply_quantile_encoder,"Rank Hot": self.encoders.apply_rankhot_encoder,
