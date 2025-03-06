@@ -18,7 +18,7 @@ class Updates:
       elif option=="Milti Edit Using Condition":
         self.multi_edit_condition(col2)
   def edit_manually(self,col2):
-    edited_data=col2.data_editor(self.dataset,num_rows="dynamic")
+    edited_data=col2.data_editor(self.dataset,num_rows="dynamic",hide_index=False)
     if col2.button("Conform These Changes",use_container_width=True,type='primary'):
       st.session_state['allData']["Stage - Updates - Edited Datframe - Manually"]=edited_data
   def single_value_edit(self,col2):
