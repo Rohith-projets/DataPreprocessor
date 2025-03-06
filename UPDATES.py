@@ -23,7 +23,7 @@ class Updates:
       st.session_state['allData']["Stage - Updates - Edited Datframe - Manually"]=edited_data
   def single_value_edit(self,col2):
     selected_column=col2.selectbox("Selecte a column",self.dataset.columns.tolist())
-    selected_row=col2.selectbox("Select row to edit value",self,dataset.index.tolist())
+    selected_row=col2.selectbox("Select row to edit value",self.dataset.index.tolist())
     entered_value=col2.text_input("Enter value to be replaced")
     if col2.button("Confirm Update",use_container_width=True,type='primary'):
       edited_dataframe=self.dataset.copy(deep=True)
