@@ -60,7 +60,7 @@ class Standadi:
           data[j]=MaxAbsScaler(feature_range=i).fit_transform(data[j])
         st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{columns}']=data
         st.dataframe(data)
-    except exception as e:
+    except Exception as e:
       st.error(e)
   def max_abs_scaler(self):
     try:
@@ -70,6 +70,6 @@ class Standadi:
         data[columns]=MaxAbsScaler().fit_transform(data[columns])
         st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{columns}']=data
         st.dataframe(data)
-    except exception as e:
+    except Exception as e:
       st.error(e)
     
