@@ -25,11 +25,11 @@ class Updates:
     try:
       edited_dataframe=self.dataset.copy(deep=True)
       selected_column=col2.selectbox("Selecte a column",self.dataset.columns.tolist())
-      selected_row=col2.text_input("Select row to edit value")
+      selected_row=col2.number_input("Select row to edit value (index value)")
       entered_value=col2.text_input("Enter value to be replaced")
       col2.warning(f"Present Value - {edited_dataframe[selected_column][selected_row]}")
       if col2.button("Confirm Update",use_container_width=True,type='primary'):
-        edited_dataframe[selected_column][eval(selected_row)]=entered_value
+        edited_dataframe.iat[self.dataset.columns.tolist().index(selected_column),selected_row]=entered_value
         col2.dataframe(edited_dataframe[:][selected_row])
         st.session_state['allData'][f'Stage - Updates - Edit Single Value - {selected_column} - {selected_row} - {entered_value}']=edited_dataframe
     except Exception as e:
