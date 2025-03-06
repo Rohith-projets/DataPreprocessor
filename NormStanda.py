@@ -4,7 +4,7 @@ from sklearn.preprocessing import *
 
 class Standadi:
   def __init__(self,df):
-    self.dataset=dataset
+    self.dataset=df
   def display(self):
     options=st.selectbox("Select options To Perform",["MaxAbs Scaler","MinMaxScaler","RobustScaler","StandardScaler"])
     if options=="StandardScaler":
