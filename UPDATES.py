@@ -29,7 +29,9 @@ class Updates:
       query=col2.text_area("Write Your Query")
       if col2.checkbox("Find Information") and query:
         edited_dataframe=col2.data_editor(copied_dataframe.query(query))
-        st.session_state['allData']["Stage - Updates - Edited Datframe - Based On Query"]=edited_dataframe
+        edited_columns,edited_indexes=edited_dataframe.columns,edited_dataframe.index
+        copied_dataframe[edited_columns][edited_indexes]=edited_dataframe
+        st.session_state['allData']["Stage - Updates - Edited Datframe - Based On Query"]=copied_dataframe
     except Exception as e:
       col2.info(e)
         
