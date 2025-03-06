@@ -22,12 +22,12 @@ class Updates:
     if col2.button("Conform These Changes",use_container_width=True,type='primary'):
       st.session_state['allData']["Stage - Updates - Edited Datframe - Manually"]=edited_data
   def single_value_edit(self,col2):
+    edited_dataframe=self.dataset.copy(deep=True)
     selected_column=col2.selectbox("Selecte a column",self.dataset.columns.tolist())
     selected_row=col2.selectbox("Select row to edit value",self.dataset.index.tolist())
     entered_value=col2.text_input("Enter value to be replaced")
-    col2.info(f"Present Value - {edited_data[selected_column][selected_row]}")
+    col2.warning(f"Present Value - {edited_data[selected_column][selected_row]}")
     if col2.button("Confirm Update",use_container_width=True,type='primary'):
-      edited_dataframe=self.dataset.copy(deep=True)
       edited_data[selected_column][selected_row]=entered_value
       col2.dataframe(edited_data[:][selected_row])
       st.session_state['allData'][f'Stage - Updates - Edit Single Value - {selected_column} - {selected_row} - {entered_value}']=edited_data
