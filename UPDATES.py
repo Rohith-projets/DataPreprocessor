@@ -55,15 +55,19 @@ class Updates:
     selected_columns=col2.multiselect("Select the columns",self.dataset.columns.tolist())
     if selected_columns:
       for i in selected_columns:
+        col2.divider()
         old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist())
         new_values=col2.text_area("Select the new values ',' separated")
         if col2.button("Modify it",use_container_width=True,type='primary'):
           new_values=new_values.split(',')
-          if len(old_vales)==len(new_values):
+          if len(old_values)==len(new_values):
             mapper[i]={old_values[i]:new_values[i] for i in range(len(old_values))}
             copied_data=copied_data.replace(mapper,axis=1)
             st.session_state['allData'][f'Stage - Upadtes - Replace - {mapper}']=copied_data
-      col2.dataframe(copied_data)
+          else:
+            col2.error("old values length must be match with new values")
+          col2.divider()
+        col2.dataframe(copied_data)
           
 
         
