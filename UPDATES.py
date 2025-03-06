@@ -58,7 +58,7 @@ class Updates:
         col2.divider()
         old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist(),key=i)
         new_values=col2.text_area(f"Select the new values ',' separated {i}")
-        if col2.button("Modify it",use_container_width=True,type='primary'):
+        if col2.button(f"Modify it {i}",use_container_width=True,type='primary'):
           new_values=new_values.split(',')
           if len(old_values)==len(new_values):
             mapper[i]={old_values[i]:new_values[i] for i in range(len(old_values))}
