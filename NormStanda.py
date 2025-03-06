@@ -52,12 +52,14 @@ class Standadi:
   def min_max_scaler(self):
     #try:
     data=self.dataset.copy(deep=True)
-    feature_range=st.text_area("Describe Feature Ranges like this (0,1) for each column comma seperated")
+    feature_range=st.text_area("Describe Feature Ranges like this 0,1 for each column comma seperated")
     columns=st.multiselect("Select the columns",self.dataset.columns.tolist())
     if st.button("Apply Max Abs Scaler",use_container_width=True,type='primary'):
-      feature_range=[eval(x) for x in feature_range.split(',')]
-      for i,j in zip(feature_range,columns):
-        data[j]=MaxAbsScaler(feature_range=i).fit_transform(data[j])
+      feature_range=[int(x) for x in feature_range.split(',')]
+      count=0
+      for j in columns:
+        data[j]=MaxAbsScaler(feature_range=(count,count+1).fit_transform(data[j]))
+        count=count+2
       st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{columns}']=data
       st.dataframe(data)
     #except Exception as e:
