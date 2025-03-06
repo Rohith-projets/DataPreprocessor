@@ -132,7 +132,7 @@ class Ml:
                   dataframe = dataframe.fill_direction(**mapper)
                   key = f"Stage-8-Machine Learning Operations - Fill Missing - Fill Direction - {mapper}"
                   st.session_state.setdefault("allData", {})[key] = dataframe
-                  st.dataframe(dataframe)
+                  col2.dataframe(dataframe)
               except ValueError as e:
                   col2.error(f"Invalid direction specified: {e}")
               except Exception as e:
