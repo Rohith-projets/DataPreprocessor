@@ -24,7 +24,8 @@ class Ml:
                                                           "Discritization/Binning","Outlier detection","Varience Stabilizing Transformations",
                                                          "Normalization & Standadization"])
       if options=="Normalization & Standadization":
-        self.norm_standas.display()
+        with col2:
+          self.norm_standas.display()
       if options=="Encode Target Variables":
         encoder_dict = {"Base": self.encoders.apply_basen_encoder,"Binary": self.encoders.apply_binary_encoder,
         "Catboost": self.encoders.apply_catboost_encoder,"Count": self.encoders.apply_count_encoder,
