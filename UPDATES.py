@@ -8,7 +8,7 @@ class Updates:
     tab1,tab2=st.tabs(["Perform Operations Here","Documentation"])
     with tab1:
       col1,col2=st.columns([1,2],border=True)
-      selected_option=col1.radio("Select option",["Edit Manually","Milti Edit Using Condition"])
+      selected_option=col1.radio("Select option",["Edit Manually","Milti Edit Using Condition","Replace Values"])
       if selected_option=="Edit Manually":
         self.edit_manually(col2)
       elif selected_option=="Single Value Edit":
@@ -17,6 +17,8 @@ class Updates:
         self.multi_edit(col2)
       elif selected_option=="Milti Edit Using Condition":
         self.multi_edit_condition(col2)
+      elif selected_option=="Replace Values":
+        self.replace_values(col2)
   def edit_manually(self,col2):
     edited_data=col2.data_editor(self.dataset,num_rows="dynamic",hide_index=False)
     if col2.button("Conform These Changes",use_container_width=True,type='primary'):
@@ -47,5 +49,21 @@ class Updates:
   
       except Exception as e:
           col2.error(f"Error: {e}")
+  def replace_values(self,col2):
+    mapper={}
+    copied_data=self.dataset.copy(deep=True)
+    selected_columns=col2.multiselect("Select the columns",self.dataset.columns.tolist())
+    if selected_columns:
+      for i in selected_columns:
+        old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist())
+        new_values=col2.text_area("Select the new values ',' separated")
+        if col2.button("Modify it",use_container_width=True,type='primary'):
+          new_values=new_values.split(',')
+          if len(old_vales)==len(new_values):
+            mapper[i]={old_values[i]:new_values[i] for i in range(len(old_values))}
+            copied_data=copied_data.replace(mapper,axis=1)
+            st.session_state['allData'][f'Stage - Upadtes - Replace - {mapper}']=copied_data
+      col2.dataframe(copied_data)
+          
 
         
