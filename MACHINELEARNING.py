@@ -119,17 +119,24 @@ class Ml:
   def impute_missing(self,col2):
     values=col2.selectbox("Select Techniques",["Fill Missing Values By Direction","Fill Missing Values By Imputation"])
     if values == "Fill Missing Values By Direction":
-      columns=col2.multiselect("Select Columns",self.dataset.columns.tolist())
-      directions=col2.text_area("Give Directions ',' separated if more than 1, direction : up,down,downup,updown")
-      directions=directions.split(',')
-      if col2.button("Fill It",use_container_width=True,type='primary'):
-        if len(columns) != len(directions):
-          col2.warning("Directions Count Must Be Equal To Columns Count")
-        else:
-          mapper={columns[x]:directions[x] for x in range(len(columns))}
-          dataframe=self.dataset.fill_direction(mapper)
-          key=f"Stage-8-Machine Learning Operations - Fill Missing - Fill Direction - {mapper}"
-          st.session_state["allData"][key]=datafarme
+      columns = col2.multiselect("Select Columns", self.dataset.columns.tolist())
+      directions = col2.text_area("Give Directions ',' separated if more than 1, direction : up,down,downup,updown")
+      if col2.button("Fill It", use_container_width=True, type='primary'):
+          directions = directions.split(',')
+          if len(columns) != len(directions):
+              col2.warning("Directions Count Must Be Equal To Columns Count")
+          else:
+              try:
+                  mapper = {columns[x]: directions[x].strip() for x in range(len(columns))}
+                  dataframe = self.dataset.copy()
+                  dataframe = dataframe.fill_direction(**mapper)
+                  key = f"Stage-8-Machine Learning Operations - Fill Missing - Fill Direction - {mapper}"
+                  st.session_state.setdefault("allData", {})[key] = dataframe
+                  st.dataframe(dataframe)
+              except ValueError as e:
+                  col2.error(f"Invalid direction specified: {e}")
+              except Exception as e:
+                  col2.error(f"An error occurred: {e}")
     if values == "Fill Missing Values By Imputation":
       options=col2.selectbox("Select The Imputation Tehnique",["MeanMedianImputer","EndTailImputer",
                                                                "RandomSampleImputer","AddMissingImputer",
