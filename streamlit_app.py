@@ -18,6 +18,7 @@ from GenAI import GenAI
 from STRINGS import *
 from Exports import *
 from aboutTheApp import About
+from UPDATES import Updates
 # Initialize session state for storing dataframes
 if "allData" not in st.session_state:
     st.session_state["allData"] = {}
@@ -169,3 +170,9 @@ elif options=="Exports":
         df = st.session_state["allData"][selected_data]
         attributes = Exports(df)
         attributes.display()
+elif options=="Update DataFrames":
+    if selected_data:
+        df = st.session_state["allData"][selected_data]
+        updates = Updates(df)
+        updates.display()
+    
