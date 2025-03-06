@@ -26,11 +26,11 @@ class Updates:
     selected_column=col2.selectbox("Selecte a column",self.dataset.columns.tolist())
     selected_row=col2.selectbox("Select row to edit value",self.dataset.index.tolist())
     entered_value=col2.text_input("Enter value to be replaced")
-    col2.warning(f"Present Value - {edited_data[selected_column][selected_row]}")
+    col2.warning(f"Present Value - {edited_dataframe[selected_column][selected_row]}")
     if col2.button("Confirm Update",use_container_width=True,type='primary'):
-      edited_data[selected_column][selected_row]=entered_value
-      col2.dataframe(edited_data[:][selected_row])
-      st.session_state['allData'][f'Stage - Updates - Edit Single Value - {selected_column} - {selected_row} - {entered_value}']=edited_data
+      edited_dataframe[selected_column][selected_row]=entered_value
+      col2.dataframe(edited_dataframe[:][selected_row])
+      st.session_state['allData'][f'Stage - Updates - Edit Single Value - {selected_column} - {selected_row} - {entered_value}']=edited_dataframe
   def multi_edit(self,col2):
     pass
   def multi_edit_condition(self,col2):
