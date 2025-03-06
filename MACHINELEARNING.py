@@ -6,18 +6,26 @@ from DATACLEANERS import *
 from feature_engine.discretisation import *
 from feature_engine.transformation import *
 from DataCleaners import DataCleaners
+from ENCODERS import Encoders
 class Ml:
   def __init__(self,df):
     self.dataset=df
     self.pandas_methods=PandasMethods(df)
     self.univariate_imputers=UnivariateImputers(df)
     self.data_cleaners=DataCleaners(df)
+    self.encodersObject=Encoders(df)
   def display(self):
     tab1,tab2,tab3=st.tabs(["Perfrom Operations","View Operations","Delete Memory"])
     with tab1:
       col1,col2=st.columns([1,2],border=True)
       options=col1.radio("Operation You Want To Perform",["Missing Data","Encode Target Variables",
                                                           "Discritization/Binning","Outlier detection","Varience Stabilizing Transformations"])
+      if options=="Encode Target Variables":
+        encoders_dict={"Target","WOE","Summary","Sum","Rank Hot","Quantile","Polynomial",
+                       "Ordinal","One Hot","Leave One Out","M Estimate","James Stein","Helmert",
+                       "Hashing","Gray","Generalized Linear Mixed Model","Count","Catboost","Binary","Base"}
+        option_mode=col2.selectbox("Select the encoding Technique",encoders_list)
+        
       if options=="Missing Data":
         option_mode=col2.selectbox("Select any one operation",["Detect Missing Values","Total Missing Values","Visualize Missing Values","Impute Missing Values"])
         if option_mode=="Detect Missing Values":
