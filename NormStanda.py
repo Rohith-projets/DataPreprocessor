@@ -55,7 +55,7 @@ class Standadi:
       feature_range=st.text_area("Describe Feature Ranges like this (0,1) for each column comma seperated")
       column=st.selectbox("Select the columns",self.dataset.columns.tolist())
       if st.button("Apply Max Abs Scaler",use_container_width=True,type='primary'):
-        data[column]=MinMaxScaler(feature_range=eval(feature_range)).fit_transform(data[column]))
+        data[column]=MinMaxScaler(feature_range=eval(feature_range)).fit_transform(data[column])
         st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{column}']=data
         st.dataframe(data)
     except Exception as e:
