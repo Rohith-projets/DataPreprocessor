@@ -32,7 +32,7 @@ class Updates:
         edited_dataframe[selected_column][selected_row]=entered_value
         col2.dataframe(edited_dataframe[:][selected_row])
         st.session_state['allData'][f'Stage - Updates - Edit Single Value - {selected_column} - {selected_row} - {entered_value}']=edited_dataframe
-    except Eception as e:
+    except Exception as e:
       col2.error(e)
   def multi_edit(self,col2):
     pass
