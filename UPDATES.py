@@ -56,7 +56,7 @@ class Updates:
     if selected_columns:
       for i in selected_columns:
         col2.divider()
-        old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist())
+        old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist(),key=i)
         new_values=col2.text_area("Select the new values ',' separated")
         if col2.button("Modify it",use_container_width=True,type='primary'):
           new_values=new_values.split(',')
