@@ -52,16 +52,14 @@ class Updates:
   def replace_values(self,col2):
     mapper={}
     copied_data=self.dataset.copy(deep=True)
-    selected_columns=col2.multiselect("Select the columns",self.dataset.columns.tolist())
+    selected_columns=col2.selectbox("Select the columns",self.dataset.columns.tolist())
     if selected_columns:
-      for i in selected_columns:
-        col2.divider()
-        old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist(),key=i)
+        old_values=col2.multiselect("Select the unique values to modify",self.dataset[i].unique().tolist())
         new_values=col2.text_area(f"Select the new values ',' separated {i}")
-        if col2.button(f"Modify it {i}",use_container_width=True,type='primary'):
+        if col2.button(f"Modify it",use_container_width=True,type='primary'):
           new_values=new_values.split(',')
           if len(old_values)==len(new_values):
-            mapper[i]={old_values[i]:new_values[i] for i in range(len(old_values))}
+            mapper[selected_columns]={old_values[i]:new_values[i] for i in range(len(old_values))}
             copied_data=copied_data.replace(mapper)
             st.session_state['allData'][f'Stage - Upadtes - Replace - {mapper}']=copied_data
           else:
