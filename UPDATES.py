@@ -15,11 +15,19 @@ class Updates:
         self.single_value_edit(col2)
       elif selected_option=="Multi Edit":
         self.multi_edit(col2)
-      elif option=="Milti Edit Using Condition":
+      elif selected_option=="Milti Edit Using Condition":
         self.multi_edit_condition(col2)
   def edit_manually(self,col2):
     edited_data=col2.data_editor(self.dataset,num_rows="dynamic",hide_index=False)
     if col2.button("Conform These Changes",use_container_width=True,type='primary'):
       st.session_state['allData']["Stage - Updates - Edited Datframe - Manually"]=edited_data
   def multi_edit_condition(self,col2):
-    pass
+    with st.expander("Check column names and row names"):
+      col2.write(self.dataset.axes)
+    try:
+      copied_dataframe=self.dataset.copy(deep=True)
+      query=col2.text_area("Write Your Query")
+      if col2.checkbox("Find Information") and query:
+        edited_dataframe=col2.data_editor(copied_dataframe.query(eval(query)))
+        st.session_state['allData']["Stage - Updates - Edited Datframe - Based On Query"]=edited_dataframe
+        
