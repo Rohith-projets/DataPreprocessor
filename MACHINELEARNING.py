@@ -7,6 +7,7 @@ from feature_engine.discretisation import *
 from feature_engine.transformation import *
 from DataCleaners import DataCleaners
 from ENCODERS import Encoders
+from NormStanda import *
 class Ml:
   def __init__(self,df):
     self.dataset=df
@@ -14,12 +15,16 @@ class Ml:
     self.univariate_imputers=UnivariateImputers(df)
     self.data_cleaners=DataCleaners(df)
     self.encoders=Encoders(df)
+    self.norm_standas=Standadi(df)
   def display(self):
     tab1,tab2,tab3=st.tabs(["Perfrom Operations","View Operations","Delete Memory"])
     with tab1:
       col1,col2=st.columns([1,2],border=True)
       options=col1.radio("Operation You Want To Perform",["Missing Data","Encode Target Variables",
-                                                          "Discritization/Binning","Outlier detection","Varience Stabilizing Transformations"])
+                                                          "Discritization/Binning","Outlier detection","Varience Stabilizing Transformations",
+                                                         "Normalization & Standadization"])
+      if options=="Normalization & Standadization":
+        pass
       if options=="Encode Target Variables":
         encoder_dict = {"Base": self.encoders.apply_basen_encoder,"Binary": self.encoders.apply_binary_encoder,
         "Catboost": self.encoders.apply_catboost_encoder,"Count": self.encoders.apply_count_encoder,
