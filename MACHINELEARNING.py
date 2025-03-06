@@ -35,7 +35,8 @@ class Ml:
         option_mode=col2.selectbox("Select the encoding Technique",encoder_dict.keys())
         if option_mode:
           with col2:
-            encoder_dict[option_mode]()
+            dataFrame=encoder_dict[option_mode]()
+            st.session_state['allData'][f'Stage - Encoding - {option_mode}']=dataFrame
       if options=="Missing Data":
         option_mode=col2.selectbox("Select any one operation",["Detect Missing Values","Total Missing Values","Visualize Missing Values","Impute Missing Values"])
         if option_mode=="Detect Missing Values":
@@ -46,8 +47,6 @@ class Ml:
           self.impute_missing(col2)
         if option_mode=="Visualize Missing Values":
           self.visualize_missing_data(col2)
-      if options=="Encode Target Variables":
-        pass
       if options=="Discritization/Binning":
         different_options=col2.selectbox("Select the descritization technique",["Binarizer","Label Binarizer","Multi Label Binarizer","Equal Frequency Descritization","Equal Width Descritization","Arbitery Descritization","Descision Tree Descritizer","KBins Descritizer"])
         if different_options=="Binarizer":
