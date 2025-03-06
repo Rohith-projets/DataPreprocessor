@@ -58,7 +58,7 @@ class Standadi:
       feature_range=[int(x) for x in feature_range.split(',')]
       count=0
       for j in columns:
-        data[j]=MinMaxScaler(feature_range=(count,count+1)).fit_transform(data[j].values)
+        data[j]=MinMaxScaler(feature_range=(count,count+1)).fit_transform(data[j].values.reshape(1,-1))
         count=count+2
       st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{columns}']=data
       st.dataframe(data)
