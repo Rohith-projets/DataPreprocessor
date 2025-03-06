@@ -35,7 +35,7 @@ class Ml:
         option_mode=col2.selectbox("Select the encoding Technique",encoder_dict.keys())
         if option_mode:
           with col2:
-            option_mode[option_mode]()
+            encoder_dict[option_mode]()
       if options=="Missing Data":
         option_mode=col2.selectbox("Select any one operation",["Detect Missing Values","Total Missing Values","Visualize Missing Values","Impute Missing Values"])
         if option_mode=="Detect Missing Values":
