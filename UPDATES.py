@@ -22,7 +22,7 @@ class Updates:
     if col2.button("Conform These Changes",use_container_width=True,type='primary'):
       st.session_state['allData']["Stage - Updates - Edited Datframe - Manually"]=edited_data
   def multi_edit_condition(self, col2):
-      with st.expander("Check column names and row names"):
+      with col2.expander("Check column names and row names"):
           col2.write(self.dataset.axes)
   
       try:
@@ -40,7 +40,7 @@ class Updates:
               copied_dataframe.loc[edited_dataframe.index, edited_dataframe.columns] = edited_dataframe
   
               # Store the updated DataFrame in session state
-              st.session_state['allData']["Stage - Updates - Edited DataFrame - Based On Query"] = copied_dataframe
+              st.session_state['allData']["Stage - Updates - Edited DataFrame - Based On Query  - Parent"] = copied_dataframe
               st.session_state['allData']["Stage - Updates - Edited DataFrame - Based On Query"] = edited_dataframe
   
               col2.success("Data updated successfully!")
