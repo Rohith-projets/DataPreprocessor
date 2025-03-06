@@ -25,6 +25,7 @@ class Updates:
     selected_column=col2.selectbox("Selecte a column",self.dataset.columns.tolist())
     selected_row=col2.selectbox("Select row to edit value",self.dataset.index.tolist())
     entered_value=col2.text_input("Enter value to be replaced")
+    col2.info(f"Present Value - {edited_data[selected_column][selected_row]}")
     if col2.button("Confirm Update",use_container_width=True,type='primary'):
       edited_dataframe=self.dataset.copy(deep=True)
       edited_data[selected_column][selected_row]=entered_value
