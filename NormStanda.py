@@ -65,7 +65,7 @@ class Standadi:
   def max_abs_scaler(self):
     try:
       data=self.dataset.copy(deep=True)
-      columns=st.selectbox("Select the columns",self.dataset.columns.tolist())
+      columns=st.multiselect("Select the columns",self.dataset.columns.tolist())
       if st.button("Apply Max Abs Scaler",use_container_width=True,type='primary'):
         data[columns]=MaxAbsScaler().fit_transform(data[columns])
         st.session_state['allData'][f'Stage-Normalization&Standadization-MaxAbsScaler-{columns}']=data
