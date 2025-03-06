@@ -30,4 +30,6 @@ class Updates:
       if col2.checkbox("Find Information") and query:
         edited_dataframe=col2.data_editor(copied_dataframe.query(eval(query)))
         st.session_state['allData']["Stage - Updates - Edited Datframe - Based On Query"]=edited_dataframe
+    except Exception as e:
+      col2.info(e)
         
