@@ -10,7 +10,7 @@ class GenerativeAI:
     def __init__(self, data):
         self.data = data  # Store dataframe
     def display(self):
-        tab1,tab2=st.tabs(["Implement Operations","View Data"])
+        tab1,tab2=st.tabs(["Implement Operations","References"])
         if self.data is not None:
             with tab1:
                 option=st.selectbox("Do You Want To Create Dashboard",["No","Yes"])
@@ -19,7 +19,7 @@ class GenerativeAI:
                     profile = ProfileReport(self.data, explorative=True)
                     st_profile_report(profile)
                 else:
-                    st.info("Select Yes For Stunning Informative Dashboard")
+                    st.video("https://youtu.be/XEVFWbo2XcM")
             with tab2:
                 st.subheader("Selected Data Appears Here",divider='blue')
                 st.dataframe(self.data)
