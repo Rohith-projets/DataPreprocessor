@@ -89,15 +89,19 @@ elif options=="View Data":
     with tab2:
         st.video("https://youtu.be/AbDKlzAzp7Y")
 elif options=="Delete Data":
-    st.subheader("Data Going To Delete",divider='blue')
-    if selected_data:
-        df = st.session_state["allData"][selected_data]
-        st.dataframe(df)
-        if st.button("Delete Selected Data",use_container_width=True,type='primary'):
-            del st.session_state["allData"][selected_data]
-            st.rerun()
-    else:
-        st.warning("No Data IS Present To Select")
+    tab1,tab2=st.tabs(["Perform Operation","Refernce"])
+    with tab1:
+        st.subheader("Data Going To Delete",divider='blue')
+        if selected_data:
+            df = st.session_state["allData"][selected_data]
+            st.dataframe(df)
+            if st.button("Delete Selected Data",use_container_width=True,type='primary'):
+                del st.session_state["allData"][selected_data]
+                st.rerun()
+        else:
+            st.warning("No Data IS Present To Select")
+    with tab2:
+        st.video("https://youtu.be/lfjqRr7v2ZE")
     
 elif options == "Attributes":
     if selected_data:
