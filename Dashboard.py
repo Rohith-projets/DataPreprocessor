@@ -19,9 +19,8 @@ class GenerativeAI:
                     profile = ProfileReport(self.data, explorative=True)
                     st_profile_report(profile)
                 else:
-                    st.video("https://youtu.be/XEVFWbo2XcM")
+                    st.info("Select Yes To Create Dashboard")
             with tab2:
-                st.subheader("Selected Data Appears Here",divider='blue')
-                st.dataframe(self.data)
+                st.video("https://youtu.be/XEVFWbo2XcM")
         else:
             st.info("No data available. Please upload a dataset.")
