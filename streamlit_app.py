@@ -78,12 +78,16 @@ with st.sidebar:
 if options=="About The App":
     About().display()
 elif options=="View Data":
-    st.subheader("Your Data",divider='blue')
-    if selected_data:
-        df = st.session_state["allData"][selected_data]
-        st.dataframe(df)
-    else:
-        st.warning("No Data IS Present To Select")
+    tab1,tab2=st.tabs(["Perform Operations","View Operation"])
+    with tab1:
+        st.subheader("Your Data",divider='blue')
+        if selected_data:
+            df = st.session_state["allData"][selected_data]
+            st.dataframe(df)
+        else:
+            st.warning("No Data IS Present To Select")
+    with tab2:
+        st.video("https://youtu.be/AbDKlzAzp7Y")
 elif options=="Delete Data":
     st.subheader("Data Going To Delete",divider='blue')
     if selected_data:
