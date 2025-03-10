@@ -11,7 +11,7 @@ class OptimizeData:
         self.dataset = df
 
     def display(self):
-        tab1, tab2 = st.tabs(["Perform Operations", "View Data"])
+        tab1, tab2 = st.tabs(["Perform Operations", "References"])
 
         with tab1:
             col1, col2 = st.columns([1, 2], border=True)
@@ -54,5 +54,4 @@ class OptimizeData:
                 col2.text("Converted to Parquet (high compression) -> Converted to Feather (fast access).")
 
         with tab2:
-            st.subheader("View Data", divider='blue')
-            st.dataframe(self.dataset)
+            st.video("https://youtu.be/Fx4LiSg-ZuE")
