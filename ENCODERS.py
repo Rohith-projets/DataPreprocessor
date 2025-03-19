@@ -166,10 +166,6 @@ class Encoders:
         if randomized:
             sigma = st.slider("Standard deviation (spread or “width”) of the normal distribution.", 0, 1, 0.05, key="glmm_sigma")
         
-        bionomial_target = st.checkbox(
-            "If True, the target must be binomial with values {0, 1} and Binomial mixed model is used. "
-            "If False, the target must be continuous and Linear mixed model is used.", key="glmm_bionomial_target")
-        
         random_state = st.text_input("Specify random state", "None", key="glmm_random_state")
         
         # Setting the values
@@ -180,12 +176,11 @@ class Encoders:
             if randomized:
                 glmm = ce.GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
-                    handle_missing=handle_missing, randomized=randomized, sigma=sigma,
-                    bionomial_target=bionomial_target, random_state=random_state)
+                    handle_missing=handle_missing, randomized=randomized, sigma=sigma,random_state=random_state)
             else:
                 glmm = ce.GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
-                    handle_missing=handle_missing, bionomial_target=bionomial_target, random_state=random_state)
+                    handle_missing=handle_missing,random_state=random_state)
             if cols != None:
                 self.transformed = glmm.fit_transform(data[cols], y)
             else:
