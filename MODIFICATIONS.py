@@ -8,7 +8,7 @@ if "allData" not in st.session_state:
     st.session_state["allData"]={}
 class MODIFICATIONS:
     def __init__(self, data):
-        self.data = data.copy(deep=True)
+        self.data = data
     
     def display(self):
         st.subheader("DataFrame Operations", divider='blue')
@@ -60,12 +60,12 @@ class MODIFICATIONS:
             if self.operation=="Add preffix":
                 self.add_preffix(col1,col2)
             if self.operation=="Add suffix":
-                self.add_suffix(col1,col2)
+                self.add_Suffix(col1,col2)
         with tab2:
             st.subheader("Your Data",divider='blue')
             st.dataframe(self.data)
                 
-    def add_suffix(self, col1, col2):
+    def add_Suffix(self, col1, col2):
         data1 = self.data.copy(deep=True)
         column = col2.selectbox("Select the columns in which you want to add values", self.data.columns)
         suffix = col2.text_area("Enter comma ',' separated values")
