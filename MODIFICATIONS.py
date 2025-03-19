@@ -74,7 +74,7 @@ class MODIFICATIONS:
         if col2.button("Apply add suffix operation",use_container_width=True,type='primary'):
             suffixes=suffixes.split(',')
             for i,j in zip(columns,suffixes):
-                data1[i]=eata1[i]+eval(j)
+                data1[i]=data1[i]+eval(j)
             col2.dataframe(data1)
             st.session_state['allData'][f'Stage - Modifications - Apply - {columns}-{suffixes}']=data1
     def apply(self, col1, col2):
