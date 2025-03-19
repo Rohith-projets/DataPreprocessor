@@ -8,7 +8,7 @@ if "allData" not in st.session_state:
     st.session_state["allData"]={}
 class MODIFICATIONS:
     def __init__(self, data):
-        self.data = data
+        self.data = data.copy(deep=True)
     
     def display(self):
         st.subheader("DataFrame Operations", divider='blue')
@@ -24,7 +24,7 @@ class MODIFICATIONS:
                     [
                         "Apply", "Apply & Map", "Aggregate", "Group By", "Sort Values", "Sort Index", "Add Suffix", "Add Prefix", 
                         "Rename", "Set Index", "Bin Numeric", "Clean Names", "Concatenate Columns", 
-                        "Expand Columns", "Factorize Columns"
+                        "Expand Columns", "Factorize Columns","Add preffix","Add suffix"
                     ]
                 )
             if self.operation=="Apply":
@@ -57,13 +57,26 @@ class MODIFICATIONS:
                 self.expand_columns(col1,col2)
             if self.operation=="Factorize Columns":
                 self.factorize_columns(col1,col2)
+            if self.operation=="Add preffix":
+                self.add_preffix(col1,col2)
+            if self.opeartion=="Add suffix":
+                self.add_suffix(col1,col2)
         with tab2:
             st.subheader("Your Data",divider='blue')
             st.dataframe(self.data)
                 
                 
                 
-    
+    def add_suffix(col1,col2):
+        data1=self.data.copy(deep=True)
+        columns=col2.multiselect("Select the columns in which you want to add values",self.data.columns)
+        suffixes=col2.text_area("enter comma ',' seperated values")
+        if col2.button("Apply add suffix operation",use_container_width=True,type='primary'):
+            suffixes=suffixes.split(',')
+            for i,j in zip(columns,suffixes):
+                data1[i]=eata1[i]+eval(j)
+            col2.dataframe(data1)
+            st.session_state['allData'][f'Stage - Modifications - Apply - {columns}-{suffixes}']=data1
     def apply(self, col1, col2):
         with col2:
             columns = st.multiselect("Select columns to apply function", self.data.columns.tolist())
