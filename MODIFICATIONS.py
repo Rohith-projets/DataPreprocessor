@@ -72,6 +72,8 @@ class MODIFICATIONS:
         
         if col2.button("Apply add suffix operation", use_container_width=True, type='primary'):
             data1[f'{column}_{suffix}']=data1[column]+suffix
+            col2.dataframe(data1)
+            st.session_state['allData'][f'Stage - Modifications - {columns} - {suffix}']=data1
             
     def apply(self, col1, col2):
         with col2:
