@@ -38,7 +38,7 @@ class AddDelete:
             ignore_index = col2.checkbox("Ignore Index", value=True)
             verify_integrity = col2.checkbox("Verify Integrity", value=False)
             copy_data = col2.checkbox("Copy Data", value=True)
-            if col2.button("Apply Operation Column Names May Override",use_continer_width=True,type='primary'):
+            if col2.button("Apply Operation Column Names May Override",use_container_width=True,type='primary'):
                 if file:
                     dataFrame = self.parseFile(file)
                     if dataFrame is not None:
