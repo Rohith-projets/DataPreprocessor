@@ -94,9 +94,7 @@ class Encoders:
         apply_transformation = st.checkbox("Apply CatBoostEncoder transformation")
     
         if apply_transformation:
-            y=st.multiselect("select the target column",list(self.data.columns)+[None])
-            y=None if y==None else y
-            self.transformed_data = encoder.fit_transform(self.data,y=y)
+            self.transformed_data = encoder.fit_transform(self.data)
             st.write("Transformed Data:")
             st.dataframe(self.transformed_data)
     
