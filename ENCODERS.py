@@ -186,7 +186,7 @@ class Encoders:
                 glmm = GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                     handle_missing=handle_missing, bionomial_target=bionomial_target, random_state=random_state)
-            if cols not None:
+            if cols != None:
                 self.transformed = glmm.fit_transform(data[cols], y)
             else:
                 self.transformed = glmm.fit_transform(data, y)
