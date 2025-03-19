@@ -74,7 +74,7 @@ class MODIFICATIONS:
             data1[f'{column}_{suffix}']=data1[column]+suffix
             col2.dataframe(data1)
             st.session_state['allData'][f'Stage - Modifications - {column} - {suffix}']=data1
-    def add_Preffix(col1,col2):
+    def add_Preffix(self,col1,col2):
         data1 = self.data.copy(deep=True)
         column = col2.selectbox("Select the columns in which you want to add values", self.data.columns)
         preffix = col2.text_area("Enter value")
