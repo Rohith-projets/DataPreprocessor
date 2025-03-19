@@ -182,9 +182,9 @@ class Encoders:
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                     handle_missing=handle_missing,random_state=random_state)
             if cols != None:
-                self.transformed = glmm.fit_transform(data[cols], y)
+                self.transformed = glmm.fit_transform(data[cols], y=y)
             else:
-                self.transformed = glmm.fit_transform(data, y)
+                self.transformed = glmm.fit_transform(data, y=y)
         return self.transformed
     def apply_gray_encoder(self):
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
