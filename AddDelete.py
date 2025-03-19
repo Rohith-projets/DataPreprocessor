@@ -47,7 +47,7 @@ class AddDelete:
                         col2.warning("Row count mismatch! Ensure the uploaded file has the same number of rows.")
                         return
     
-                    new_columns = extractedColumns +[x+"1" for x in list(dataFrame.columns) if x in extractedColumns else x]
+                    new_columns = extractedColumns + [x + "1" if x in extractedColumns else x for x in list(dataFrame.columns)]
                     data = pd.concat([self.data, dataFrame],
                                      axis=1,
                                      join=join_type,
