@@ -178,12 +178,12 @@ class Encoders:
         
         if st.checkbox("Apply Generalized Linear Mixed Model", key="glmm_apply"):
             if randomized:
-                glmm = GLMMEncoder(
+                glmm = ce.GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                     handle_missing=handle_missing, randomized=randomized, sigma=sigma,
                     bionomial_target=bionomial_target, random_state=random_state)
             else:
-                glmm = GLMMEncoder(
+                glmm = ce.GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                     handle_missing=handle_missing, bionomial_target=bionomial_target, random_state=random_state)
             if cols != None:
