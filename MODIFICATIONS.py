@@ -58,7 +58,7 @@ class MODIFICATIONS:
             if self.operation=="Factorize Columns":
                 self.factorize_columns(col1,col2)
             if self.operation=="Add preffix":
-                self.add_preffix(col1,col2)
+                self.add_Preffix(col1,col2)
             if self.operation=="Add suffix":
                 self.add_Suffix(col1,col2)
         with tab2:
@@ -73,8 +73,16 @@ class MODIFICATIONS:
         if col2.button("Apply add suffix operation", use_container_width=True, type='primary'):
             data1[f'{column}_{suffix}']=data1[column]+suffix
             col2.dataframe(data1)
-            st.session_state['allData'][f'Stage - Modifications - {columns} - {suffix}']=data1
-            
+            st.session_state['allData'][f'Stage - Modifications - {column} - {suffix}']=data1
+    def add_Preffix(col1,col2):
+        data1 = self.data.copy(deep=True)
+        column = col2.selectbox("Select the columns in which you want to add values", self.data.columns)
+        preffix = col2.text_area("Enter value")
+        
+        if col2.button("Apply add suffix operation", use_container_width=True, type='primary'):
+            data1[f'{column}_{preffix}']=preffix+data1[column]
+            col2.dataframe(data1)
+            st.session_state['allData'][f'Stage - Modifications - {column} - {preffix}']=data1
     def apply(self, col1, col2):
         with col2:
             columns = st.multiselect("Select columns to apply function", self.data.columns.tolist())
