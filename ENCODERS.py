@@ -13,13 +13,13 @@ class Encoders:
         Apply BaseNEncoder transformation based on user inputs.
         """
         verbose = st.selectbox("Verbose", [0, 1])
-        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.select_dtypes(include=['object']).columns))
+        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
         base = st.slider("Base", 2, 10, 2)
         
-        cols = self.data.select_dtypes(include=['object']).columns.tolist() if cols == 'All Columns' else [cols]
+        cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
 
         encoder = ce.BaseNEncoder(cols=cols, base=base, verbose=verbose, drop_invariant=drop_invariant,
                                   handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
@@ -46,13 +46,13 @@ class Encoders:
         Apply BinaryEncoder transformation based on user inputs.
         """
         verbose = st.selectbox("Verbose", [0, 1])
-        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.select_dtypes(include=['object']).columns))
+        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
         base = st.slider("Base", 2, 10, 2)
         
-        cols = self.data.select_dtypes(include=['object']).columns.tolist() if cols == 'All Columns' else [cols]
+        cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
     
         encoder = ce.BinaryEncoder(cols=cols, base=base, verbose=verbose, drop_invariant=drop_invariant,
                                    handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
@@ -79,14 +79,14 @@ class Encoders:
         Apply CatBoostEncoder transformation based on user inputs.
         """
         verbose = st.selectbox("Verbose", [0, 1])
-        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.select_dtypes(include=['object']).columns))
+        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
         sigma = st.slider("Sigma (Gaussian Noise)", 0.0, 2.0, 0.1)
         a = st.slider("Additive Smoothing (a)", 0.1, 2.0, 1.0)
         
-        cols = self.data.select_dtypes(include=['object']).columns.tolist() if cols == 'All Columns' else [cols]
+        cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
     
         encoder = ce.CatBoostEncoder(cols=cols, sigma=sigma, a=a, verbose=verbose, drop_invariant=drop_invariant,
                                      handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
@@ -116,7 +116,7 @@ class Encoders:
         Apply CountEncoder transformation based on user inputs.
         """
         verbose = st.selectbox("Verbose", [0, 1])
-        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.select_dtypes(include=['object']).columns))
+        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
@@ -124,7 +124,7 @@ class Encoders:
         min_group_size = st.text_input("Minimum Group Size", '1')
         combine_min_nan_groups = st.checkbox("Combine Small Groups with NaN Groups", True)
         
-        cols = self.data.select_dtypes(include=['object']).columns.tolist() if cols == 'All Columns' else [cols]
+        cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
     
         encoder = ce.CountEncoder(cols=cols, normalize=normalize, min_group_size=int(min_group_size),
                                   combine_min_nan_groups=combine_min_nan_groups, verbose=verbose,
