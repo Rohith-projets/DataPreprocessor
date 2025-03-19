@@ -150,12 +150,13 @@ class Encoders:
     
         return self.transformed_data
     def generalized_linear_mixed_model(self):
+        data=self.data
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
         
         verbose = int(st.text_input("Enter the verbose level (Int)", 0, key="glmm_verbose_level"))
         cols = st.multiselect("Select the columns on which you want to apply transformation",
                               ["All Columns"].extend(self.data.columns), key="glmm_columns_selection")
-        y = st.selectbox("Select the target column", [None].extend(self.data.columns), key="glmm_target_column")
+        y = st.selectbox("Select the target column", [None]+list(self.data.columns), key="glmm_target_column")
         drop_invariant = st.checkbox("Drop the invariant", key="glmm_drop_invariant")
         handle_unknown = st.selectbox("How to handle unknown", ['value', 'error', 'return_nan'], key="glmm_handle_unknown")
         handle_missing = st.selectbox("How to handle missing", ['value', 'error', 'return_nan'], key="glmm_handle_missing")
@@ -185,8 +186,7 @@ class Encoders:
                 glmm = GLMMEncoder(
                     verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                     handle_missing=handle_missing, bionomial_target=bionomial_target, random_state=random_state)
-            
-            self.transformed = glmm.fit_transform(cols, y)
+            self.transformed = glmm.fit_transform(data[cols], y) if cols not None else glmm.fit_transform(data,y)
         return self.transformed
     def apply_gray_encoder(self):
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
