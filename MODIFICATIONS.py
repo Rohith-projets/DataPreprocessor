@@ -65,7 +65,7 @@ class MODIFICATIONS:
             st.subheader("Your Data",divider='blue')
             st.dataframe(self.data)
                 
-   def add_suffix(self, col1, col2):
+    def add_suffix(self, col1, col2):
         data1 = self.data.copy(deep=True)
         columns = col2.multiselect("Select the columns in which you want to add values", self.data.columns)
         suffixes = col2.text_area("Enter comma ',' separated values")
