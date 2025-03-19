@@ -29,7 +29,7 @@ class AddDelete:
     def add(self, col2):
         col2.subheader("You Implement Add Operation Here", divider='blue')
         options = col2.selectbox("Select the option to add", ["Add Columns", "Add Rows"])
-    
+        extractedColumns=list(self.data.columns)
         if options == "Add Columns":
             col2.info("Upload a dataset with the same column names and the same number of rows")
             file = col2.file_uploader("Upload the file", type=["csv", "xlsx"])
@@ -41,6 +41,8 @@ class AddDelete:
     
             if file:
                 dataFrame = self.parseFile(file)
+                dataFrameColumns=list(dataFrame.columns)
+                new_columns=extractedColumns+dataFrameColumns
                 if dataFrame is not None:
                     if dataFrame.shape[0] != self.data.shape[0]:
                         col2.warning("Row count mismatch! Ensure the uploaded file has the same number of rows.")
@@ -53,7 +55,7 @@ class AddDelete:
                                      ignore_index=ignore_index, 
                                      verify_integrity=verify_integrity, 
                                      copy=copy_data)
-    
+                    data.columns=new_columns
                     key = "Stage - Add & Delete - Add Columns Through File Uploader"
                     st.session_state["allData"][key] = data
                     col2.dataframe(data)
