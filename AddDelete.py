@@ -29,8 +29,7 @@ class AddDelete:
     def add(self, col2):
         col2.subheader("You Implement Add Operation Here", divider='blue')
         options = col2.selectbox("Select the option to add", ["Add Columns", "Add Rows"])
-        extractedColumns = list(self.data.columns)
-    
+
         if options == "Add Columns":
             col2.info("Upload a dataset with the same column names and the same number of rows")
             file = col2.file_uploader("Upload the file", type=["csv", "xlsx"])
@@ -39,26 +38,23 @@ class AddDelete:
             ignore_index = col2.checkbox("Ignore Index", value=True)
             verify_integrity = col2.checkbox("Verify Integrity", value=False)
             copy_data = col2.checkbox("Copy Data", value=True)
-    
-            if file:
-                dataFrame = self.parseFile(file)
-                if dataFrame is not None:
-                    if dataFrame.shape[0] != self.data.shape[0]:
-                        col2.warning("Row count mismatch! Ensure the uploaded file has the same number of rows.")
-                        return
-    
-                    new_columns = extractedColumns + list(dataFrame.columns)
-                    data = pd.concat([self.data, dataFrame],
-                                     axis=1,
-                                     join=join_type,
-                                     copy=copy_data)
-                    data.columns = new_columns
-    
-                    key = "Stage - Add & Delete - Add Columns Through File Uploader"
-                    st.session_state["allData"][key] = data
-                    col2.dataframe(data)
-                else:
-                    col2.error("Could not read the file. Please check the format.")
+            if col2.button("Apply Operation Column Names May Override",use_continer_width=True,type='primary'):
+                if file:
+                    dataFrame = self.parseFile(file)
+                    if dataFrame is not None:
+                        if dataFrame.shape[0] != self.data.shape[0]:
+                            col2.warning("Row count mismatch! Ensure the uploaded file has the same number of rows.")
+                            return
+                        data = pd.concat([self.data, dataFrame],
+                                         axis=1,
+                                         join=join_type,
+                                         copy=copy_data)
+        
+                        key = "Stage - Add & Delete - Add Columns Through File Uploader"
+                        st.session_state["allData"][key] = data
+                        col2.dataframe(data)
+                    else:
+                        col2.error("Could not read the file. Please check the format.")
     
         elif options == "Add Rows":
             col2.info("Upload a dataset with the same column names to append rows")
