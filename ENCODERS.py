@@ -156,7 +156,7 @@ class Encoders:
         verbose = int(st.text_input("Enter the verbose level (Int)", 0, key="glmm_verbose_level"))
         cols = st.multiselect("Select the columns on which you want to apply transformation",
                               ["All Columns"].extend(self.data.columns), key="glmm_columns_selection")
-        y = st.selectbox("Select the target column", [None]+list(self.data.columns), key="glmm_target_column")
+        y = st.selectbox("Select the target column", list(self.data.columns)+[None], key="glmm_target_column")
         drop_invariant = st.checkbox("Drop the invariant", key="glmm_drop_invariant")
         handle_unknown = st.selectbox("How to handle unknown", ['value', 'error', 'return_nan'], key="glmm_handle_unknown")
         handle_missing = st.selectbox("How to handle missing", ['value', 'error', 'return_nan'], key="glmm_handle_missing")
