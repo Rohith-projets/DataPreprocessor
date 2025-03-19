@@ -59,7 +59,7 @@ class MODIFICATIONS:
                 self.factorize_columns(col1,col2)
             if self.operation=="Add preffix":
                 self.add_preffix(col1,col2)
-            if self.opeartion=="Add suffix":
+            if self.operation=="Add suffix":
                 self.add_suffix(col1,col2)
         with tab2:
             st.subheader("Your Data",divider='blue')
