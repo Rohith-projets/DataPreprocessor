@@ -67,32 +67,12 @@ class MODIFICATIONS:
                 
     def add_suffix(self, col1, col2):
         data1 = self.data.copy(deep=True)
-        columns = col2.multiselect("Select the columns in which you want to add values", self.data.columns)
-        suffixes = col2.text_area("Enter comma ',' separated values")
+        column = col2.selectbox("Select the columns in which you want to add values", self.data.columns)
+        suffix = col2.text_area("Enter comma ',' separated values")
         
         if col2.button("Apply add suffix operation", use_container_width=True, type='primary'):
-            if not columns:
-                col2.warning("Please select at least one column.")
-                return
-        
-            if not suffixes.strip():
-                col2.warning("Please enter at least one suffix value.")
-                return
-        
-            suffixes = suffixes.split(',')
-        
-            if len(columns) != len(suffixes):
-                col2.warning("Number of selected columns and suffixes must be equal.")
-                return
-        
-            try:
-                for i, j in zip(columns, suffixes):
-                    data1[i] = data1[i].astype(str) + str(eval(j.strip()))
-        
-                col2.dataframe(data1)
-                st.session_state['allData'][f'Stage - Modifications - Apply - {columns}-{suffixes}'] = data1
-            except Exception as e:
-                col2.error(f"An error occurred: {e}")
+            data1[f'{column}_{suffix}']=data1[column]+suffix
+            
     def apply(self, col1, col2):
         with col2:
             columns = st.multiselect("Select columns to apply function", self.data.columns.tolist())
