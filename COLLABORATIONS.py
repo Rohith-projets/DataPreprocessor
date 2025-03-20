@@ -37,7 +37,7 @@ class Collaborate:
     def collaborate(self):
         col1, col2 = st.columns([1, 2])
         with col1:
-            radio_options = st.radio("Options", ["Enter Addresses", "Add Data", "Send Mails"])
+            radio_options = st.radio("Options", ["Enter Addresses", "Add Data"])
 
         if radio_options == "Enter Addresses":
             sender_email = col2.text_input("Enter your email address")
@@ -94,10 +94,6 @@ class Collaborate:
                         col2.success("Data successfully added!")
                     except Exception as e:
                         col2.error(f"Error updating data: {e}")
-
-        if radio_options == "Send Mails":
-            self.send_mails()
-
     def view(self):
         col1, col2 = st.columns([1, 2])
         with col1:
@@ -135,41 +131,3 @@ class Collaborate:
                         col2.warning("No data found for the selected key.")
                 except Exception as e:
                     col2.error(f"Error retrieving data: {e}")
-
-    def send_mails(self):
-        team_members = st.session_state['receiver_email']
-        st.subheader("Verify Once")
-        st.write(team_members)
-
-        smtp_password = st.text_input("Enter your email password", type='password')
-
-        if st.button("Send Mails", type='secondary', use_container_width=True):
-            if not smtp_password:
-                st.error("Please enter your email password to proceed.")
-                return
-
-            try:
-                sender_email = st.session_state['sender_email']
-                subject = "Collaboration Invitation"
-                body = f"Hello, {sender_email} has shared data with you. Please visit the app to view the details."
-
-                smtp_server = "smtp.gmail.com"
-                smtp_port = 587
-
-                with smtplib.SMTP(smtp_server, smtp_port) as server:
-                    server.starttls()
-                    server.login(sender_email, smtp_password)
-
-                    for recipient in team_members:
-                        if '@' in recipient and '.' in recipient:
-                            email_message = EmailMessage()
-                            email_message["From"] = sender_email
-                            email_message["To"] = recipient
-                            email_message["Subject"] = subject
-                            email_message.set_content(body)
-
-                            server.send_message(email_message)
-
-                    st.success("Emails successfully sent!")
-            except Exception as e:
-                st.error(f"Error sending emails: {e}")
