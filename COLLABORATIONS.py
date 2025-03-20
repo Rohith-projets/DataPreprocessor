@@ -33,7 +33,7 @@ class Collaborate:
             pass
 
     def collaborate(self):
-        col1, col2 = st.columns([1, 2])
+        col1, col2 = st.columns([1, 2],border=True)
         with col1:
             radio_options = st.radio("Options", ["Enter Addresses", "Add Data"])
 
@@ -93,7 +93,7 @@ class Collaborate:
                     except Exception as e:
                         col2.error(f"Error updating data: {e}")
     def view(self):
-        col1, col2 = st.columns([1, 2])
+        col1, col2 = st.columns([1, 2],border=True)
         with col1:
             if st.session_state['count'] > 1:
                 data_keys = [f"data_{x}" for x in range(1, st.session_state['count'])]
