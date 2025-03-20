@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
-import smtplib
-from email.message import EmailMessage
 
 # Initialize session state values
 session_defaults = {
