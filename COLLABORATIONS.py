@@ -3,11 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
 
-# Initialize session variables
-variables = ['sender_email', 'receiver_email', 'count']
-for i in variables:
-    if i not in st.session_state:
-        st.session_state[i] = None if i != 'count' else 1
+# Ensure count is initialized properly
+if 'count' not in st.session_state:
+    st.session_state['count'] = 1
+if 'sender_email' not in st.session_state:
+    st.session_state['sender_email'] = None
+if 'receiver_email' not in st.session_state:
+    st.session_state['receiver_email'] = None
 
 class Collaborate:
     def __init__(self, df):
@@ -83,7 +85,6 @@ class Collaborate:
     def view(self):
         col1, col2 = st.columns([1, 2], border=True)
         with col1:
-            # Display all available data keys
             if st.session_state['count'] > 1:
                 data_keys = [f"data_{x}" for x in range(1, st.session_state['count'])]
                 selected_data = st.radio("Added data in DB", data_keys)
