@@ -19,6 +19,7 @@ from STRINGS import *
 from Exports import *
 from aboutTheApp import About
 from UPDATES import Updates
+from COLLABORATIONS import Collaborate
 # Initialize session state for storing dataframes
 if "allData" not in st.session_state:
     st.session_state["allData"] = {}
@@ -67,9 +68,9 @@ with st.sidebar:
     options = option_menu(
         "Select the operation to perform",
         ["About The App","View Data","Delete Data","Optimize DataFrame","Attributes","Dashboard", "Compare DataFrames","Modifications","Filterations","Mathematical & Statistical",
-          "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI","Exports"],
+          "Update DataFrames", "Add & Delete", "Access", "Plot Data","Famous Machine Learning Steps","String Manipulation","GenAI","Exports","collaborate"],
         icons=["eye","eraser","info-circle","info-circle", "columns","columns","search","columns", "pen", "pencil-square",
-               "trash", "tools", "book","robot","pencil","sun","moon"],
+               "trash", "tools", "book","robot","pencil","sun","moon","meet"],
         menu_icon='gear',
         default_index=0
     )
@@ -183,4 +184,8 @@ elif options=="Update DataFrames":
         df = st.session_state["allData"][selected_data]
         updates = Updates(df)
         updates.display()
-    
+elif options=="collaborate":
+    if selected_data:
+        df = st.session_state["allData"][selected_data]
+        updates = Collaborate(df)
+        updates.display()
