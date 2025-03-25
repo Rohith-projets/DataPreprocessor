@@ -15,7 +15,7 @@ class Collaborate:
         tab1, tab2 = st.tabs(["Add Data", "View Data"])
         
         with tab1:
-            col1, col2 = st.columns([1, 2])
+            col1, col2 = st.columns([1, 2],border=True)
             
             with col1:
                 option = st.radio("Select Operation", 
