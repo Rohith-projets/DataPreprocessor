@@ -144,7 +144,7 @@ class Collaborate:
                 st.error(f"Error adding data: {e}")
     
     def _view_data_ui(self):
-        col1, col2 = st.columns([1, 2])
+        col1, col2 = st.columns([1, 2],border=True)
         
         with col1:
             if 'database' not in st.session_state:
