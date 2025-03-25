@@ -14,7 +14,9 @@ class Collaborate:
         self.data = df
         
     def display(self):
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Add Data", "View Data", "Modify Data", "Delete Data", "Add Media"])
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+            ["Add Data", "View Data", "Modify Data", "Delete Data", "Add Media", "View Complaints"]
+        )
         
         with tab1:
             self._add_data_tab()
@@ -30,6 +32,9 @@ class Collaborate:
             
         with tab5:
             self._add_media_tab()
+            
+        with tab6:
+            self._view_complaints_tab()
     
     def _add_data_tab(self):
         col1, col2 = st.columns([1, 2], border=True)
@@ -122,6 +127,76 @@ class Collaborate:
         with col2:
             if selected_collection:
                 self._add_media_ui(selected_collection)
+    
+    def _view_complaints_tab(self):
+        col1, col2 = st.columns([1, 2], border=True)
+        
+        with col1:
+            if 'database' not in st.session_state:
+                st.warning("Please connect to a database first")
+                return
+                
+            try:
+                complaints_col = st.session_state['database']['complaints']
+                complaints = list(complaints_col.find({}, {'id_number': 1}))
+                
+                if not complaints:
+                    st.warning("No complaints found")
+                    return
+                    
+                complaint_options = [comp['id_number'] for comp in complaints]
+                selected_complaint = st.radio("Select Complaint", complaint_options,
+                                             key="complaints_radio")
+            
+            except Exception as e:
+                st.error(f"Error accessing complaints: {e}")
+                return
+        
+        with col2:
+            if 'selected_complaint' in locals():
+                self._display_complaint_details(selected_complaint)
+    
+    def _display_complaint_details(self, complaint_id):
+        try:
+            complaints_col = st.session_state['database']['complaints']
+            complaint = complaints_col.find_one({'id_number': complaint_id})
+            
+            if not complaint:
+                st.error("Complaint not found")
+                return
+            
+            st.write(f"**Name:** {complaint.get('name', 'N/A')}")
+            st.write(f"**Collection:** {complaint.get('collection', 'N/A')}")
+            st.write(f"**Complaint On:** {complaint.get('complaint_on', 'N/A')}")
+            st.write(f"**Complaint:** {complaint.get('complaint', 'N/A')}")
+            
+            # Display the actual data being complained about
+            collection_name = complaint.get('collection')
+            complaint_on = complaint.get('complaint_on')
+            
+            if collection_name and complaint_on:
+                try:
+                    target_col = st.session_state['database'][collection_name]
+                    target_doc = target_col.find_one({'key': complaint_on})
+                    
+                    if target_doc:
+                        st.subheader("Complained Data", divider='blue')
+                        
+                        if 'data' in target_doc:
+                            st.dataframe(pd.DataFrame(target_doc['data']))
+                        elif 'image' in target_doc:
+                            img_bytes = base64.b64decode(target_doc['image'])
+                            st.image(img_bytes, caption=target_doc.get('description', ''), 
+                                   use_column_width=True)
+                        else:
+                            st.write("No displayable data found in the document")
+                    else:
+                        st.warning("The complained document was not found")
+                except Exception as e:
+                    st.error(f"Error fetching complained data: {e}")
+            
+        except Exception as e:
+            st.error(f"Error displaying complaint details: {e}")
     
     def _connect_database_ui(self):
         st.subheader("Connect to Database")
