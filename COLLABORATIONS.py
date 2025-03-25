@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 from pymongo import MongoClient
+from PIL import Image
+import io
+import base64
 
 class Collaborate:
     def __init__(self, df):
@@ -11,7 +14,7 @@ class Collaborate:
         self.data = df
         
     def display(self):
-        tab1, tab2, tab3, tab4 = st.tabs(["Add Data", "View Data", "Modify Data", "Delete Data"])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Add Data", "View Data", "Modify Data", "Delete Data", "Add Media"])
         
         with tab1:
             self._add_data_tab()
@@ -24,13 +27,17 @@ class Collaborate:
             
         with tab4:
             self._delete_data_tab()
+            
+        with tab5:
+            self._add_media_tab()
     
     def _add_data_tab(self):
         col1, col2 = st.columns([1, 2], border=True)
         
         with col1:
             option = st.radio("Select Operation", 
-                             ["Connect To Data Base", "Add Collections", "Add Data"])
+                             ["Connect To Data Base", "Add Collections", "Add Data"],
+                             key="add_data_radio")
             
         with col2:
             if option == "Connect To Data Base":
@@ -52,8 +59,9 @@ class Collaborate:
             if not collections:
                 return
                 
-            selected_collection = st.selectbox("Select Collection", collections, key="view_collection")
-            view_option = st.radio("View Option", ["View Selected Output", "View All Outputs"])
+            selected_collection = st.selectbox("Select Collection", collections, key="view_collection_select")
+            view_option = st.radio("View Option", ["View Selected Output", "View All Outputs"],
+                                 key="view_option_radio")
         
         with col2:
             if view_option == "View Selected Output":
@@ -73,7 +81,7 @@ class Collaborate:
             if not collections:
                 return
                 
-            selected_collection = st.radio("Select Collection", collections, key="modify_collection")
+            selected_collection = st.radio("Select Collection", collections, key="modify_collection_radio")
         
         with col2:
             if selected_collection:
@@ -88,22 +96,39 @@ class Collaborate:
                 return
                 
             delete_option = st.radio("Delete Option", 
-                                   ["Delete Database", "Delete Collection", "Delete Documents"])
+                                   ["Delete Collection", "Delete Documents"],
+                                   key="delete_option_radio")
         
         with col2:
-            if delete_option == "Delete Database":
-                self._delete_database_ui()
-            elif delete_option == "Delete Collection":
+            if delete_option == "Delete Collection":
                 self._delete_collection_ui()
             elif delete_option == "Delete Documents":
                 self._delete_documents_ui()
     
+    def _add_media_tab(self):
+        col1, col2 = st.columns([1, 2], border=True)
+        
+        with col1:
+            if 'database' not in st.session_state:
+                st.warning("Please connect to a database first")
+                return
+                
+            collections = self._get_collections()
+            if not collections:
+                return
+                
+            selected_collection = st.selectbox("Select Collection", collections, key="media_collection_select")
+        
+        with col2:
+            if selected_collection:
+                self._add_media_ui(selected_collection)
+    
     def _connect_database_ui(self):
         st.subheader("Connect to Database")
-        db_name = st.text_input("Database Name")
-        password = st.text_input("Password", type="password")
+        db_name = st.text_input("Database Name", key="db_name_input")
+        password = st.text_input("Password", type="password", key="db_password_input")
         
-        if st.button("Connect"):
+        if st.button("Connect", key="connect_db_button"):
             if not db_name:
                 st.error("Please enter a database name")
                 return
@@ -134,9 +159,9 @@ class Collaborate:
             st.warning("Please connect to a database first")
             return
             
-        collection_name = st.text_input("Collection Name")
+        collection_name = st.text_input("Collection Name", key="new_collection_name")
         
-        if st.button("Add Collection"):
+        if st.button("Add Collection", key="add_collection_button"):
             if not collection_name:
                 st.error("Please enter a collection name")
                 return
@@ -165,17 +190,17 @@ class Collaborate:
         if not collections:
             return
             
-        selected_collection = st.selectbox("Select Collection", collections)
+        selected_collection = st.selectbox("Select Collection", collections, key="add_data_collection_select")
         data_options = list(st.session_state['allData'].keys())
-        selected_data = st.selectbox("Select Data", data_options)
+        selected_data = st.selectbox("Select Data", data_options, key="add_data_data_select")
         
         if selected_data:
             st.dataframe(st.session_state['allData'][selected_data])
             
-        key = st.text_input("Enter a key for this data")
-        description = st.text_area("Enter description")
+        key = st.text_input("Enter a key for this data", key="add_data_key_input")
+        description = st.text_area("Enter description", key="add_data_description_area")
         
-        if st.button("Add Data"):
+        if st.button("Add Data", key="add_data_submit_button"):
             if not key or not selected_data:
                 st.error("Please provide both a key and select data")
                 return
@@ -198,6 +223,49 @@ class Collaborate:
             except Exception as e:
                 st.error(f"Error adding data: {e}")
     
+    def _add_media_ui(self, collection_name):
+        st.subheader("Add Media to Collection")
+        
+        uploaded_file = st.file_uploader("Choose an image file", 
+                                       type=['png', 'jpg', 'jpeg'],
+                                       key=f"media_uploader_{collection_name}")
+        
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption='Uploaded Image', use_column_width=True)
+            
+            key = st.text_input("Enter a key for this image", key=f"media_key_{collection_name}")
+            description = st.text_area("Enter description", key=f"media_desc_{collection_name}")
+            
+            if st.button("Add Media", key=f"add_media_button_{collection_name}"):
+                if not key:
+                    st.error("Please provide a key")
+                    return
+                    
+                try:
+                    collection = st.session_state['database'][collection_name]
+                    
+                    if collection.find_one({'key': key}):
+                        st.warning(f"Key '{key}' already exists in this collection")
+                        return
+                        
+                    # Convert image to binary
+                    buffered = io.BytesIO()
+                    image.save(buffered, format=image.format)
+                    img_str = base64.b64encode(buffered.getvalue()).decode()
+                    
+                    doc = {
+                        'key': key,
+                        'description': description,
+                        'image': img_str,
+                        'image_format': image.format.lower()
+                    }
+                    
+                    collection.insert_one(doc)
+                    st.success("Media added successfully to collection")
+                except Exception as e:
+                    st.error(f"Error adding media: {e}")
+    
     def _view_selected_output(self, collection_name):
         st.subheader("View Selected Output")
         
@@ -209,14 +277,20 @@ class Collaborate:
             return
             
         key_options = [doc['key'] for doc in documents]
-        selected_key = st.selectbox("Select Key", key_options)
+        selected_key = st.selectbox("Select Key", key_options, key=f"view_key_select_{collection_name}")
         
         if selected_key:
             doc = collection.find_one({'key': selected_key})
             
             st.subheader(selected_key, divider='blue')
-            st.dataframe(pd.DataFrame(doc['data']))
-            st.write("**Description:**", doc.get('description', 'No description available'))
+            
+            if 'data' in doc:
+                st.dataframe(pd.DataFrame(doc['data']))
+                st.write("**Description:**", doc.get('description', 'No description available'))
+            elif 'image' in doc:
+                img_bytes = base64.b64decode(doc['image'])
+                st.image(img_bytes, caption=doc.get('description', ''), use_column_width=True)
+                st.write("**Format:**", doc.get('image_format', 'Unknown'))
     
     def _view_all_outputs(self, collection_name):
         st.subheader("View All Outputs")
@@ -230,8 +304,15 @@ class Collaborate:
             
         for doc in documents:
             st.subheader(doc['key'], divider='blue')
-            st.dataframe(pd.DataFrame(doc['data']))
-            st.write("**Description:**", doc.get('description', 'No description available'))
+            
+            if 'data' in doc:
+                st.dataframe(pd.DataFrame(doc['data']))
+                st.write("**Description:**", doc.get('description', 'No description available'))
+            elif 'image' in doc:
+                img_bytes = base64.b64decode(doc['image'])
+                st.image(img_bytes, caption=doc.get('description', ''), use_column_width=True)
+                st.write("**Format:**", doc.get('image_format', 'Unknown'))
+            
             st.divider()
     
     def _modify_collection_data(self, collection_name):
@@ -245,27 +326,39 @@ class Collaborate:
             return
             
         key_options = [doc['key'] for doc in documents]
-        selected_key = st.selectbox("Select Document to Modify", key_options)
+        selected_key = st.selectbox("Select Document to Modify", key_options, 
+                                  key=f"modify_key_select_{collection_name}")
         
         if selected_key:
             doc = collection.find_one({'key': selected_key})
             
             st.subheader("Current Values", divider='blue')
-            st.text_input("Current Key", value=doc['key'], disabled=True)
-            st.text_area("Current Description", value=doc.get('description', ''), disabled=True)
-            st.dataframe(pd.DataFrame(doc['data']), use_container_width=True)
+            st.text_input("Current Key", value=doc['key'], disabled=True,
+                         key=f"current_key_{selected_key}")
+            
+            if 'data' in doc:
+                st.text_area("Current Description", value=doc.get('description', ''), disabled=True,
+                            key=f"current_desc_{selected_key}")
+                st.dataframe(pd.DataFrame(doc['data']), use_container_width=True)
+            elif 'image' in doc:
+                img_bytes = base64.b64decode(doc['image'])
+                st.image(img_bytes, caption=doc.get('description', ''), use_column_width=True)
+                st.write("**Format:**", doc.get('image_format', 'Unknown'))
             
             st.subheader("New Values", divider='blue')
-            new_key = st.text_input("New Key", value=doc['key'])
-            new_description = st.text_area("New Description", value=doc.get('description', ''))
+            new_key = st.text_input("New Key", value=doc['key'],
+                                   key=f"new_key_{selected_key}")
+            new_description = st.text_area("New Description", value=doc.get('description', ''),
+                                         key=f"new_desc_{selected_key}")
             
-            if 'allData' in st.session_state:
+            if 'data' in doc and 'allData' in st.session_state:
                 data_options = list(st.session_state['allData'].keys())
-                selected_data = st.selectbox("Select New Data (optional)", [""] + data_options)
+                selected_data = st.selectbox("Select New Data (optional)", [""] + data_options,
+                                           key=f"new_data_{selected_key}")
             else:
                 selected_data = ""
             
-            if st.button("Update Document"):
+            if st.button("Update Document", key=f"update_button_{selected_key}"):
                 update_data = {}
                 
                 if new_key != doc['key']:
@@ -277,7 +370,7 @@ class Collaborate:
                 if new_description != doc.get('description', ''):
                     update_data['description'] = new_description
                 
-                if selected_data and selected_data != "":
+                if selected_data and selected_data != "" and 'data' in doc:
                     update_data['data'] = st.session_state['allData'][selected_data].to_dict('records')
                 
                 if update_data:
@@ -286,25 +379,6 @@ class Collaborate:
                 else:
                     st.warning("No changes detected")
     
-    def _delete_database_ui(self):
-        st.subheader("Delete Database")
-        
-        db_name = st.session_state['database'].name
-        st.warning(f"You are about to delete the entire database: {db_name}")
-        
-        confirmation = st.text_input(f"Type '{db_name}' to confirm")
-        
-        if st.button("Delete Database", type="primary"):
-            if confirmation == db_name:
-                try:
-                    self.client.drop_database(db_name)
-                    del st.session_state['database']
-                    st.success(f"Database '{db_name}' deleted successfully")
-                except Exception as e:
-                    st.error(f"Error deleting database: {e}")
-            else:
-                st.error("Confirmation name does not match")
-    
     def _delete_collection_ui(self):
         st.subheader("Delete Collection")
         
@@ -312,9 +386,10 @@ class Collaborate:
         if not collections:
             return
             
-        selected_collections = st.multiselect("Select Collections to Delete", collections)
+        selected_collections = st.multiselect("Select Collections to Delete", collections,
+                                            key="delete_collections_multiselect")
         
-        if st.button("Delete Selected Collections", type="primary"):
+        if st.button("Delete Selected Collections", type="primary", key="delete_collections_button"):
             for col_name in selected_collections:
                 try:
                     st.session_state['database'].drop_collection(col_name)
@@ -329,7 +404,8 @@ class Collaborate:
         if not collections:
             return
             
-        selected_collection = st.selectbox("Select Collection", collections)
+        selected_collection = st.selectbox("Select Collection", collections,
+                                         key="delete_docs_collection_select")
         
         if selected_collection:
             collection = st.session_state['database'][selected_collection]
@@ -340,9 +416,10 @@ class Collaborate:
                 return
                 
             document_keys = [doc['key'] for doc in documents]
-            selected_docs = st.multiselect("Select Documents to Delete", document_keys)
+            selected_docs = st.multiselect("Select Documents to Delete", document_keys,
+                                         key="delete_docs_multiselect")
             
-            if st.button("Delete Selected Documents", type="primary"):
+            if st.button("Delete Selected Documents", type="primary", key="delete_docs_button"):
                 for doc_key in selected_docs:
                     try:
                         collection.delete_one({'key': doc_key})
