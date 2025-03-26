@@ -137,16 +137,7 @@ class Encoders:
                 
                 st.write("Transformed Data:")
                 st.dataframe(self.transformed_data)
-    
-                st.write("Encoder Parameters:")
-                st.write(f"Verbose: {verbose}")
-                st.write(f"Columns Encoded: {cols_to_encode}")
-                st.write(f"Drop Invariant: {drop_invariant}")
-                st.write(f"Handle Unknown: {handle_unknown}")
-                st.write(f"Handle Missing: {handle_missing}")
-                st.write(f"Sigma: {sigma}")
-                st.write(f"Additive Smoothing (a): {a}")
-                st.write(f"Target Column: {target_col}")
+                st.session_state['allData']['Stage - Machine Learning - Encoding - catboost encoder']=self.transformed_data
                 
             except Exception as e:
                 st.error(f"An error occurred during CatBoost encoding: {str(e)}")
