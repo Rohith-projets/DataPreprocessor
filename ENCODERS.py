@@ -98,6 +98,7 @@ class Encoders:
     def apply_catboost_encoder(self):
         """
         Apply CatBoostEncoder transformation based on user inputs.
+        CatBoostEncoder requires a target variable y for supervised encoding.
         """
         verbose = st.selectbox("Verbose", [0, 1])
         cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
@@ -109,26 +110,55 @@ class Encoders:
         
         cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
     
-        encoder = ce.CatBoostEncoder(cols=cols, sigma=sigma, a=a, verbose=verbose, drop_invariant=drop_invariant,
-                                     handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
+        encoder = ce.CatBoostEncoder(
+            cols=cols,
+            sigma=sigma,
+            a=a,
+            verbose=verbose,
+            drop_invariant=drop_invariant,
+            handle_unknown=handle_unknown,
+            handle_missing=handle_missing,
+            return_df=True
+        )
         
         apply_transformation = st.checkbox("Apply CatBoostEncoder transformation")
     
         if apply_transformation:
-            self.transformed_data = encoder.fit_transform(self.data)
-            st.write("Transformed Data:")
-            st.dataframe(self.transformed_data)
+            # CatBoost requires a target variable, so we need to let user select it
+            target_col = st.selectbox(
+                "Select Target Column (required for CatBoost Encoding)",
+                [col for col in self.data.columns if col not in cols] if cols != self.data.columns.tolist() else self.data.columns,
+                key="catboost_target"
+            )
+            
+            try:
+                if target_col is None:
+                    st.error("Please select a target column for CatBoost Encoding")
+                    return self.data
+                
+                X = self.data.drop(columns=[target_col])
+                y = self.data[target_col]
+                
+                self.transformed_data = encoder.fit_transform(X, y)
+                
+                st.write("Transformed Data:")
+                st.dataframe(self.transformed_data)
     
-            st.write("Encoder Parameters:")
-            st.write(f"Verbose: {verbose}")
-            st.write(f"Columns Encoded: {cols}")
-            st.write(f"Drop Invariant: {drop_invariant}")
-            st.write(f"Handle Unknown: {handle_unknown}")
-            st.write(f"Handle Missing: {handle_missing}")
-            st.write(f"Sigma: {sigma}")
-            st.write(f"Additive Smoothing (a): {a}")
+                st.write("Encoder Parameters:")
+                st.write(f"Verbose: {verbose}")
+                st.write(f"Columns Encoded: {cols}")
+                st.write(f"Drop Invariant: {drop_invariant}")
+                st.write(f"Handle Unknown: {handle_unknown}")
+                st.write(f"Handle Missing: {handle_missing}")
+                st.write(f"Sigma: {sigma}")
+                st.write(f"Additive Smoothing (a): {a}")
+                st.write(f"Target Column: {target_col}")
+                
+            except Exception as e:
+                st.error(f"An error occurred during CatBoost encoding: {str(e)}")
+                return self.data
     
-        return self.transformed_data
+        return self.transformed_data if apply_transformation else self.data
     
     def apply_count_encoder(self):
         """
