@@ -56,9 +56,9 @@ class COMPARE:
         st.title("DataFrame Comparison Tool")
         
         col1, col2, col3 = st.columns([1, 2, 1], gap="large")
-        col1.header("Operation")
-        col2.header("Implementation")
-        col3.header("Configuration")
+        col1.subheader("Operation",divider='blue')
+        col2.subheader("Implementation",divider='blue')
+        col3.subheader("Configuration",divider='blue')
 
         with col1:
             operation = st.radio(
