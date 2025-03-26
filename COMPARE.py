@@ -105,9 +105,10 @@ class COMPARE:
                                 }
                                 op = op_map[comparison_type]
                                 try:
+                                    # Convert values to numeric if possible
+                                    if isinstance(values, pd.Series):
+                                        values = pd.to_numeric(values, errors='ignore')
                                     result = getattr(self.dataframe, op)(values, axis=axis)
-                                    key = f"{op}_with_values_{str(values)[:20]}"
-                                    st.session_state['allData'][key] = result
                                     st.success("Comparison completed!")
                                     st.dataframe(result)
                                 except Exception as e:
@@ -134,8 +135,6 @@ class COMPARE:
                             op = op_map[comparison_type]
                             try:
                                 result = getattr(self.dataframe, op)(other_df)
-                                key = f"{op}_with_dataset_{uploaded_file.name[:20]}"
-                                st.session_state['allData'][key] = result
                                 st.success("Comparison completed!")
                                 st.dataframe(result)
                             except Exception as e:
@@ -154,8 +153,6 @@ class COMPARE:
                             df2 = st.session_state['allData'][selected_keys[1]]
                             try:
                                 comparison_result = df1.compare(df2)
-                                key = f"comparison_{selected_keys[0]}_vs_{selected_keys[1]}"
-                                st.session_state['allData'][key] = comparison_result
                                 st.success("Comparison completed!")
                                 st.dataframe(comparison_result)
                             except Exception as e:
@@ -169,41 +166,46 @@ class COMPARE:
                         self.dataframe.columns,
                         key="source_columns"
                     )
-                    target_columns = st.multiselect(
-                        "Select target columns",
-                        self.dataframe.columns,
-                        key="target_columns"
+                    
+                    target_dataset = st.selectbox(
+                        "Select target dataset",
+                        list(st.session_state['allData'].keys()),
+                        key="target_dataset"
                     )
                     
-                    if source_columns and target_columns and st.button("Compare Selected Columns"):
-                        try:
-                            source_df = self.dataframe[source_columns]
-                            target_df = self.dataframe[target_columns]
-                            op_map = {
-                                "Equal (eq)": "eq",
-                                "Not Equal (ne)": "ne",
-                                "Less Than (lt)": "lt",
-                                "Greater Than (gt)": "gt",
-                                "Less Equal (le)": "le",
-                                "Greater Equal (ge)": "ge"
-                            }
-                            op = op_map[comparison_type]
-                            result = getattr(source_df, op)(target_df)
-                            key = f"{op}_source_vs_target_{','.join(source_columns)}_vs_{','.join(target_columns)}"
-                            st.session_state['allData'][key] = result
-                            st.success("Comparison completed!")
-                            st.dataframe(result)
-                        except Exception as e:
-                            st.error(f"Error during comparison: {str(e)}")
-
-            # Display all stored results without an expander
-            if st.session_state['allData']:
-                st.subheader("All Comparison Results")
-                for key, df in st.session_state['allData'].items():
-                    st.subheader(key)
-                    st.dataframe(df)
-            else:
-                st.info("No comparison results yet")
+                    if target_dataset:
+                        target_df = st.session_state['allData'][target_dataset]
+                        target_columns = st.multiselect(
+                            "Select target columns",
+                            target_df.columns,
+                            key="target_columns"
+                        )
+                        
+                        if source_columns and target_columns and len(source_columns) == len(target_columns):
+                            if st.button("Compare Selected Columns"):
+                                try:
+                                    source_subset = self.dataframe[source_columns]
+                                    target_subset = target_df[target_columns]
+                                    
+                                    # Align column names for comparison
+                                    target_subset.columns = source_subset.columns
+                                    
+                                    op_map = {
+                                        "Equal (eq)": "eq",
+                                        "Not Equal (ne)": "ne",
+                                        "Less Than (lt)": "lt",
+                                        "Greater Than (gt)": "gt",
+                                        "Less Equal (le)": "le",
+                                        "Greater Equal (ge)": "ge"
+                                    }
+                                    op = op_map[comparison_type]
+                                    result = getattr(source_subset, op)(target_subset)
+                                    st.success("Comparison completed!")
+                                    st.dataframe(result)
+                                except Exception as e:
+                                    st.error(f"Error during comparison: {str(e)}")
+                        else:
+                            st.warning("Source and target columns must have the same length.")
 
         except Exception as e:
             st.error(f"Unexpected error: {str(e)}")
