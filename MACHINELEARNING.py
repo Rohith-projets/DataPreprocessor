@@ -53,7 +53,7 @@ class Ml:
         if option_mode=="Visualize Missing Values":
           self.visualize_missing_data(col2)
       if options=="Discritization/Binning":
-        different_options=col2.selectbox("Select the descritization technique",["Binarizer","Multi Label Binarizer","Equal Frequency Descritization","Equal Width Descritization","Arbitery Descritization","Descision Tree Descritizer","KBins Descritizer"])
+        different_options=col2.selectbox("Select the descritization technique",["Binarizer","Multi Label Binarizer","Equal Frequency Descritization","Equal Width Descritization","Arbitery Descritization","Descision Tree Descritizer"])
         if different_options=="Binarizer":
           self.data_cleaners.binarize(col2)
         if different_options=="Multi Label Binarizer":
