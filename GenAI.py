@@ -21,7 +21,7 @@ class GenAI:
 
         try:
             response = client.chat.completions.create(
-                model="llama2-70b-4096",  # Use a supported Groq model
+                model="llama-3.3-70b-versatile",  # Use a supported Groq model
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": prompt}
