@@ -236,7 +236,7 @@ class Encoders:
         
         if st.button("Apply Hashing Encoding"):
             try:
-                hashing_encoder = category_encoders.HashingEncoder(
+                hashing_encoder = ce.HashingEncoder(
                     verbose=verbose,
                     cols=cols,
                     drop_invariant=drop_invariant,
