@@ -274,21 +274,32 @@ class Encoders:
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
         
         # Input widgets for HelmertEncoder parameters
-        verbose = int(st.text_input("Enter the verbose level (Int)", 0, key="helmert_verbose"))
-        cols = st.multiselect("Select the columns on which you want to apply transformation",
-                              ["All Columns"].extend(self.data.columns), key="helmert_columns")
-        y = st.selectbox("Select the target column", [None].extend(self.data.columns), key="helmert_target_column")
+        verbose = int(st.text_input("Enter the verbose level (Int)", "0", key="helmert_verbose"))
+        cols = st.multiselect(
+            "Select the columns on which you want to apply transformation",
+            ["All Columns"] + list(self.data.columns),  # Fixed list concatenation
+            key="helmert_columns"
+        )
+        y = st.selectbox(
+            "Select the target column", 
+            [None] + list(self.data.columns),  # Fixed list concatenation
+            key="helmert_target_column"
+        )
         drop_invariant = st.checkbox("Drop columns with 0 variance", key="helmert_drop_invariant")
-        return_df = st.checkbox("Return a Pandas DataFrame from transform (otherwise returns a NumPy array)", key="helmert_return_df")
-        handle_unknown = st.selectbox("How to handle unknown values", 
-                                       ['value', 'error', 'return_nan', 'indicator'], 
-                                       key="helmert_handle_unknown")
-        handle_missing = st.selectbox("How to handle missing values", 
-                                       ['value', 'error', 'return_nan', 'indicator'], 
-                                       key="helmert_handle_missing")
+        return_df = st.checkbox("Return a Pandas DataFrame from transform (otherwise returns a NumPy array)", True, key="helmert_return_df")
+        handle_unknown = st.selectbox(
+            "How to handle unknown values", 
+            ['value', 'error', 'return_nan', 'indicator'], 
+            key="helmert_handle_unknown"
+        )
+        handle_missing = st.selectbox(
+            "How to handle missing values", 
+            ['value', 'error', 'return_nan', 'indicator'], 
+            key="helmert_handle_missing"
+        )
         
         # Setting the values
-        cols = None if cols == "All Columns" else cols
+        cols = None if "All Columns" in cols else cols  # Fixed condition for "All Columns"
         
         if st.checkbox("Apply Helmert Encoder", key="helmert_apply"):
             helmert_encoder = ce.HelmertEncoder(
@@ -301,10 +312,16 @@ class Encoders:
             )
             
             # Ensure the y parameter is handled properly
-            if y is not None and cols is None:
-                self.transformed = helmert_encoder.fit_transform(self.data, self.data[y])
+            if y is not None:
+                if cols is None:
+                    self.transformed = helmert_encoder.fit_transform(self.data, self.data[y])
+                else:
+                    self.transformed = helmert_encoder.fit_transform(self.data[cols], self.data[y])
             else:
-                self.transformed = helmert_encoder.fit_transform(self.data[cols])
+                if cols is None:
+                    self.transformed = helmert_encoder.fit_transform(self.data)
+                else:
+                    self.transformed = helmert_encoder.fit_transform(self.data[cols])
             
             return self.transformed
     def apply_james_stein_encoder(self):
