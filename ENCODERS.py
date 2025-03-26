@@ -171,47 +171,104 @@ class Encoders:
         return self.transformed
                 
     def apply_hashing_encoder(self):
-        st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
+        st.subheader("Hashing Encoder Configuration")
         
-        verbose = int(st.text_input("Enter the verbose level (Int)", 0, key="hashing_verbose"))
-        cols = st.multiselect("Select the columns on which you want to apply transformation",
-                              ["All Columns"].extend(self.data.columns), key="hashing_columns")
-        y = st.selectbox("Select the target column", [None].extend(self.data.columns), key="hassing_target_column")
-        drop_invariant = st.checkbox("Drop columns with 0 variance", key="hashing_drop_invariant")
-        return_df = st.checkbox("Return a Pandas DataFrame from transform (otherwise returns a NumPy array)", key="hashing_return_df")
-        hash_method = st.text_input("Enter the hashing method (e.g., 'md5')", "md5", key="hashing_hash_method")
-        max_process = st.number_input("Maximum number of processes (Range: 1-64)", min_value=1, max_value=64, value=0, key="hashing_max_process")
-        max_sample = st.number_input("Maximum number of samples to encode per process", min_value=0, value=0, key="hashing_max_sample")
-        n_components = st.number_input("Number of bits to use to represent the feature", min_value=1, value=8, key="hashing_n_components")
+        # Get user inputs with proper defaults and validation
+        verbose = st.number_input("Verbose level", min_value=0, max_value=1, value=0, key="hashing_verbose")
+        
+        # Fix column selection - list.extend() returns None, so we need to create a new list
+        cols = st.multiselect(
+            "Select columns to encode",
+            ["All Columns"] + list(self.data.columns),
+            key="hashing_columns"
+        )
+        
+        # Fix target selection - same issue with extend()
+        y = st.selectbox(
+            "Select target column (optional)",
+            [None] + list(self.data.columns),
+            key="hashing_target_column"
+        )
+        
+        drop_invariant = st.checkbox("Drop invariant columns", False, key="hashing_drop_invariant")
+        return_df = st.checkbox("Return Pandas DataFrame", True, key="hashing_return_df")
+        hash_method = st.selectbox(
+            "Hashing method",
+            ['md5', 'sha1', 'sha256', 'sha512'],
+            key="hashing_hash_method"
+        )
+        
+        # Fix max_process default value (can't be 0 when min_value=1)
+        max_process = st.number_input(
+            "Maximum number of processes (1-64)", 
+            min_value=1, 
+            max_value=64, 
+            value=min(4, os.cpu_count() or 1),  # Default to 4 or cpu_count if available
+            key="hashing_max_process"
+        )
+        
+        max_sample = st.number_input(
+            "Maximum samples per process", 
+            min_value=0, 
+            value=0,  # 0 means automatic calculation
+            key="hashing_max_sample"
+        )
+        
+        n_components = st.number_input(
+            "Number of bits for feature representation", 
+            min_value=1, 
+            max_value=32, 
+            value=8,
+            key="hashing_n_components"
+        )
+        
+        default_method = 'fork' if os.name != 'nt' else 'spawn'
         process_creation_method = st.selectbox(
             "Process creation method",
             ["fork", "spawn", "forkserver"],
-            index=0 if not self.data.empty else 1,
+            index=0 if default_method == 'fork' else 1,
             key="hashing_process_creation_method"
         )
         
-        # Setting the values
-        cols = None if cols == "All Columns" else cols
+        # Process column selection
+        cols = None if "All Columns" in cols else cols
         
-        if st.checkbox("Apply Hashing Encoder", key="hashing_apply"):
-            hashing_encoder = category_encoders.HashingEncoder(
-                verbose=verbose,
-                cols=cols,
-                drop_invariant=drop_invariant,
-                return_df=return_df,
-                hash_method=hash_method,
-                max_process=max_process,
-                max_sample=max_sample,
-                n_components=n_components,
-                process_creation_method=process_creation_method
-            )
-            
-            if y is not None and cols is None:
-                self.transformed = hashing_encoder.fit_transform(self.data, self.data[y])
-            else:
-                self.transformed = hashing_encoder.fit_transform(self.data[cols])
-            return self.transformed
-
+        if st.button("Apply Hashing Encoding"):
+            try:
+                hashing_encoder = category_encoders.HashingEncoder(
+                    verbose=verbose,
+                    cols=cols,
+                    drop_invariant=drop_invariant,
+                    return_df=return_df,
+                    hash_method=hash_method,
+                    max_process=max_process,
+                    max_sample=max_sample,
+                    n_components=n_components,
+                    process_creation_method=process_creation_method
+                )
+                
+                # Handle different input scenarios
+                if cols is None:
+                    X = self.data
+                else:
+                    X = self.data[cols]
+                
+                if y is not None:
+                    self.transformed = hashing_encoder.fit_transform(X, self.data[y])
+                else:
+                    self.transformed = hashing_encoder.fit_transform(X)
+                
+                st.success("Hashing encoding applied successfully!")
+                st.write("Transformed Data Preview:")
+                st.dataframe(self.transformed.head())
+                
+                return self.transformed
+                
+            except Exception as e:
+                st.error(f"Error applying hashing encoding: {str(e)}")
+                return self.data
+        
+        return self.data
     def apply_helmert_encoder(self):
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
         
