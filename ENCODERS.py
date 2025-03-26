@@ -96,30 +96,17 @@ class Encoders:
         return self.transformed_data
     
     def apply_catboost_encoder(self):
-        """
-        Apply CatBoostEncoder transformation based on user inputs.
-        CatBoostEncoder requires a target variable y for supervised encoding.
-        """
         verbose = st.selectbox("Verbose", [0, 1])
-        cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
+        all_cols = list(self.data.columns)
+        cols = st.selectbox("Columns to Encode", ['All Columns'] + all_cols)
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
         sigma = st.slider("Sigma (Gaussian Noise)", 0.0, 2.0, 0.1)
         a = st.slider("Additive Smoothing (a)", 0.1, 2.0, 1.0)
         
-        cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
-    
-        encoder = ce.CatBoostEncoder(
-            cols=cols,
-            sigma=sigma,
-            a=a,
-            verbose=verbose,
-            drop_invariant=drop_invariant,
-            handle_unknown=handle_unknown,
-            handle_missing=handle_missing,
-            return_df=True
-        )
+        # Store original columns to encode
+        cols_to_encode = all_cols if cols == 'All Columns' else [cols]
         
         apply_transformation = st.checkbox("Apply CatBoostEncoder transformation")
     
@@ -127,7 +114,7 @@ class Encoders:
             # CatBoost requires a target variable, so we need to let user select it
             target_col = st.selectbox(
                 "Select Target Column (required for CatBoost Encoding)",
-                [col for col in self.data.columns if col not in cols] if cols != self.data.columns.tolist() else self.data.columns,
+                [col for col in all_cols if col not in cols_to_encode] if cols != 'All Columns' else all_cols,
                 key="catboost_target"
             )
             
@@ -135,6 +122,21 @@ class Encoders:
                 if target_col is None:
                     st.error("Please select a target column for CatBoost Encoding")
                     return self.data
+                
+                # Ensure cols_to_encode doesn't include the target column
+                cols_to_encode = [col for col in cols_to_encode if col != target_col]
+                
+                # Initialize encoder with final columns to encode
+                encoder = ce.CatBoostEncoder(
+                    cols=cols_to_encode,
+                    sigma=sigma,
+                    a=a,
+                    verbose=verbose,
+                    drop_invariant=drop_invariant,
+                    handle_unknown=handle_unknown,
+                    handle_missing=handle_missing,
+                    return_df=True
+                )
                 
                 X = self.data.drop(columns=[target_col])
                 y = self.data[target_col]
@@ -146,7 +148,7 @@ class Encoders:
     
                 st.write("Encoder Parameters:")
                 st.write(f"Verbose: {verbose}")
-                st.write(f"Columns Encoded: {cols}")
+                st.write(f"Columns Encoded: {cols_to_encode}")
                 st.write(f"Drop Invariant: {drop_invariant}")
                 st.write(f"Handle Unknown: {handle_unknown}")
                 st.write(f"Handle Missing: {handle_missing}")
