@@ -261,7 +261,7 @@ class Encoders:
                 
                 st.success("Hashing encoding applied successfully!")
                 st.write("Transformed Data Preview:")
-                st.dataframe(self.transformed.head())
+                st.dataframe(self.transformed)
                 
                 return self.transformed
                 
