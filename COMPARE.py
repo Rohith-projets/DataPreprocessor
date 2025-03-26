@@ -153,10 +153,14 @@ class COMPARE:
                                 # Perform pairwise comparisons for all selected keys
                                 results = []
                                 for i in range(len(selected_keys) - 1):
-                                    df1 = st.session_state['allData'][selected_keys[i]]
-                                    df2 = st.session_state['allData'][selected_keys[i + 1]]
+                                    df1_key = selected_keys[i]
+                                    df2_key = selected_keys[i + 1]
+                                    df1 = st.session_state['allData'][df1_key]
+                                    df2 = st.session_state['allData'][df2_key]
+                                    
+                                    # Perform comparison using pandas.DataFrame.compare
                                     comparison_result = df1.compare(df2)
-                                    results.append((f"{selected_keys[i]} vs {selected_keys[i + 1]}", comparison_result))
+                                    results.append((f"{df1_key} vs {df2_key}", comparison_result))
                                 
                                 # Display all comparison results
                                 if results:
