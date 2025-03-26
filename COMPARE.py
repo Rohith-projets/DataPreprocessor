@@ -148,32 +148,17 @@ class COMPARE:
                             key="output_select"
                         )
                         
-                        if len(selected_keys) >= 2 and st.button("Compare Selected Outputs"):
+                        if len(selected_keys) == 2 and st.button("Compare Selected"):
+                            df1 = st.session_state['allData'][selected_keys[0]]
+                            df2 = st.session_state['allData'][selected_keys[1]]
                             try:
-                                # Perform pairwise comparisons for all selected keys
-                                results = []
-                                for i in range(len(selected_keys) - 1):
-                                    df1_key = selected_keys[i]
-                                    df2_key = selected_keys[i + 1]
-                                    df1 = st.session_state['allData'][df1_key]
-                                    df2 = st.session_state['allData'][df2_key]
-                                    
-                                    # Perform comparison using pandas.DataFrame.compare
-                                    comparison_result = df1.compare(df2)
-                                    results.append((f"{df1_key} vs {df2_key}", comparison_result))
-                                
-                                # Display all comparison results
-                                if results:
-                                    st.success("Comparison completed!")
-                                    for title, result in results:
-                                        st.subheader(title)
-                                        st.dataframe(result)
-                                else:
-                                    st.warning("No valid comparisons were performed.")
+                                comparison_result = df1.compare(df2)
+                                st.success("Comparison completed!")
+                                st.dataframe(comparison_result)
                             except Exception as e:
                                 st.error(f"Error during comparison: {str(e)}")
                     else:
-                        st.warning("No comparison results available yet.")
+                        st.warning("No comparison results available yet")
 
                 elif operation == "Compare Selection":
                     source_columns = st.multiselect(
