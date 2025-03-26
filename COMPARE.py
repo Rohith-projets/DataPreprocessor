@@ -55,7 +55,7 @@ class COMPARE:
     def display(self):
         st.title("DataFrame Comparison Tool")
         
-        col1, col2, col3 = st.columns([1, 2, 1], gap="large")
+        col1, col2, col3 = st.columns([1, 2, 1], border=True)
         col1.subheader("Operation",divider='blue')
         col2.subheader("Implementation",divider='blue')
         col3.subheader("Configuration",divider='blue')
