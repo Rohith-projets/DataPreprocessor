@@ -17,7 +17,7 @@ class About:
         
         # Title and Introduction
         st.header("About The App")
-        st.write_stream(
+        st.write(
             "This application is a powerful data analysis and visualization tool, "
             "similar to Excel and Power BI. It allows users to perform various "
             "operations, preprocess data efficiently, and visualize insights through "
@@ -26,7 +26,7 @@ class About:
             "functionalities, making data handling seamless."
         )
 
-        st.write_stream(
+        st.write(
             "Users can explore their datasets using various functions, optimize "
             "DataFrames for better performance, and preprocess data effectively. "
             "Additionally, the application provides visualization tools to gain "
@@ -35,7 +35,7 @@ class About:
             "monitor and analyze their data dynamically."
         )
 
-        st.write_stream(
+        st.write(
             "With a user-friendly interface, the app ensures that even users "
             "with minimal technical knowledge can easily clean, transform, "
             "and visualize data. The inclusion of automated preprocessing "
@@ -59,7 +59,7 @@ class About:
         # Style the metric cards
         style_metric_cards(border_left_color="#4CAF50")
         
-        st.write_stream(
+        st.write(
             "This tool is designed to empower users with an extensive suite of "
             "functionalities, ensuring a smooth and effective data analysis experience. "
             "Whether you are a data scientist, business analyst, or a beginner exploring "
