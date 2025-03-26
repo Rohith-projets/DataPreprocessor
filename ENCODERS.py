@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import category_encoders as ce
 import numpy
+import os
 
 class Encoders:
     def __init__(self, data: pd.DataFrame):
