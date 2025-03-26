@@ -54,25 +54,44 @@ class Encoders:
         
         cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
     
-        encoder = ce.BinaryEncoder(cols=cols, base=base, verbose=verbose, drop_invariant=drop_invariant,
-                                   handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
+        encoder = ce.BinaryEncoder(
+            cols=cols,
+            base=base,
+            verbose=verbose,
+            drop_invariant=drop_invariant,
+            handle_unknown=handle_unknown,
+            handle_missing=handle_missing,
+            return_df=True
+        )
         
         apply_transformation = st.checkbox("Apply BinaryEncoder transformation")
     
         if apply_transformation:
-            y=st.multiselect("select the target column",list(self.data.columns)+[None])
-            y=None if y==None else y
-            self.transformed_data = encoder.fit_transform(self.data,y=y)
-            st.write("Transformed Data:")
-            st.dataframe(self.transformed_data)
-    
-            st.write("Encoder Parameters:")
-            st.write(f"Verbose: {verbose}")
-            st.write(f"Columns Encoded: {cols}")
-            st.write(f"Drop Invariant: {drop_invariant}")
-            st.write(f"Handle Unknown: {handle_unknown}")
-            st.write(f"Handle Missing: {handle_missing}")
-            st.write(f"Base: {base}")
+            # Handle target column selection properly
+            target_options = list(self.data.columns)
+            selected_target = st.selectbox("Select the target column (optional)", [None] + target_options)
+            
+            try:
+                if selected_target is None:
+                    self.transformed_data = encoder.fit_transform(self.data)
+                else:
+                    y = self.data[selected_target]
+                    X = self.data.drop(columns=[selected_target])
+                    self.transformed_data = encoder.fit_transform(X, y)
+                
+                st.write("Transformed Data:")
+                st.dataframe(self.transformed_data)
+        
+                st.write("Encoder Parameters:")
+                st.write(f"Verbose: {verbose}")
+                st.write(f"Columns Encoded: {cols}")
+                st.write(f"Drop Invariant: {drop_invariant}")
+                st.write(f"Handle Unknown: {handle_unknown}")
+                st.write(f"Handle Missing: {handle_missing}")
+                st.write(f"Base: {base}")
+                
+            except Exception as e:
+                st.error(f"An error occurred during encoding: {str(e)}")
     
         return self.transformed_data
     
