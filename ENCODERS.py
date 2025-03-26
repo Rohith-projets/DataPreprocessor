@@ -81,14 +81,6 @@ class Encoders:
                 
                 st.write("Transformed Data:")
                 st.dataframe(self.transformed_data)
-        
-                st.write("Encoder Parameters:")
-                st.write(f"Verbose: {verbose}")
-                st.write(f"Columns Encoded: {cols}")
-                st.write(f"Drop Invariant: {drop_invariant}")
-                st.write(f"Handle Unknown: {handle_unknown}")
-                st.write(f"Handle Missing: {handle_missing}")
-                st.write(f"Base: {base}")
                 
             except Exception as e:
                 st.error(f"An error occurred during encoding: {str(e)}")
