@@ -9,21 +9,15 @@ class Encoders:
         self.transformed_data = None
 
     def apply_basen_encoder(self):
-        """
-        Apply BaseNEncoder transformation based on user inputs.
-        """
         verbose = st.selectbox("Verbose", [0, 1])
         cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
         handle_unknown = st.selectbox("Handle Unknown", ['error', 'return_nan', 'value', 'indicator'])
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
-        base = st.slider("Base", 2, 10, 2)
-        
+        base = st.slider("Base", 2, 10, 2)  
         cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
-
         encoder = ce.BaseNEncoder(cols=cols, base=base, verbose=verbose, drop_invariant=drop_invariant,
                                   handle_unknown=handle_unknown, handle_missing=handle_missing, return_df=True)
-        
         apply_transformation = st.checkbox("Apply BaseNEncoder transformation")
 
         if apply_transformation:
@@ -31,20 +25,9 @@ class Encoders:
             st.write("Transformed Data:")
             st.dataframe(self.transformed_data)
 
-            st.write("Encoder Parameters:")
-            st.write(f"Verbose: {verbose}")
-            st.write(f"Columns Encoded: {cols}")
-            st.write(f"Drop Invariant: {drop_invariant}")
-            st.write(f"Handle Unknown: {handle_unknown}")
-            st.write(f"Handle Missing: {handle_missing}")
-            st.write(f"Base: {base}")
-
         return self.transformed_data
 
     def apply_binary_encoder(self):
-        """
-        Apply BinaryEncoder transformation based on user inputs.
-        """
         verbose = st.selectbox("Verbose", [0, 1])
         cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
@@ -129,16 +112,11 @@ class Encoders:
                     handle_missing=handle_missing,
                     return_df=True
                 )
-                
                 X = self.data
                 y = self.data[target_col]
-                
                 self.transformed_data = encoder.fit_transform(X, y)
-                
                 st.write("Transformed Data:")
                 st.dataframe(self.transformed_data)
-                st.session_state['allData']['Stage - Machine Learning - Encoding - catboost encoder']=self.transformed_data
-                
             except Exception as e:
                 st.error(f"An error occurred during CatBoost encoding: {str(e)}")
                 return self.data
@@ -146,9 +124,6 @@ class Encoders:
         return self.transformed_data if apply_transformation else self.data
     
     def apply_count_encoder(self):
-        """
-        Apply CountEncoder transformation based on user inputs.
-        """
         verbose = st.selectbox("Verbose", [0, 1])
         cols = st.selectbox("Columns to Encode", ['All Columns'] + list(self.data.columns))
         drop_invariant = st.checkbox("Drop Invariant Columns", False)
@@ -156,70 +131,103 @@ class Encoders:
         handle_missing = st.selectbox("Handle Missing", ['error', 'return_nan', 'value', 'indicator'])
         normalize = st.checkbox("Normalize Counts", False)
         min_group_size = st.text_input("Minimum Group Size", '1')
-        combine_min_nan_groups = st.checkbox("Combine Small Groups with NaN Groups", True)
-        
+        combine_min_nan_groups = st.checkbox("Combine Small Groups with NaN Groups", True)       
         cols = self.data.columns.tolist() if cols == 'All Columns' else [cols]
-    
         encoder = ce.CountEncoder(cols=cols, normalize=normalize, min_group_size=int(min_group_size),
                                   combine_min_nan_groups=combine_min_nan_groups, verbose=verbose,
                                   drop_invariant=drop_invariant, handle_unknown=handle_unknown,
                                   handle_missing=handle_missing, return_df=True)
-        
         apply_transformation = st.checkbox("Apply CountEncoder transformation")
-    
         if apply_transformation:
             self.transformed_data = encoder.fit_transform(self.data)
             st.write("Transformed Data:")
-            st.dataframe(self.transformed_data)
-    
-            st.write("Encoder Parameters:")
-            st.write(f"Verbose: {verbose}")
-            st.write(f"Columns Encoded: {cols}")
-            st.write(f"Drop Invariant: {drop_invariant}")
-            st.write(f"Handle Unknown: {handle_unknown}")
-            st.write(f"Handle Missing: {handle_missing}")
-            st.write(f"Normalize Counts: {normalize}")
-            st.write(f"Min Group Size: {min_group_size}")
-            st.write(f"Combine Small Groups with NaN Groups: {combine_min_nan_groups}")
-    
+            st.dataframe(self.transformed_data)    
         return self.transformed_data
     def generalized_linear_mixed_model(self):
-        data=self.data
-        st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
+        st.subheader("Generalized Linear Mixed Model Encoding")
         
-        verbose = int(st.text_input("Enter the verbose level (Int)", 0, key="glmm_verbose_level"))
-        cols = st.multiselect("Select the columns on which you want to apply transformation",
-                              ["All Columns"]+list(self.data.columns), key="glmm_columns_selection")
-        y = st.selectbox("Select the target column", list(self.data.columns)+[None], key="glmm_target_column")
-        drop_invariant = st.checkbox("Drop the invariant", key="glmm_drop_invariant")
-        handle_unknown = st.selectbox("How to handle unknown", ['value', 'error', 'return_nan'], key="glmm_handle_unknown")
-        handle_missing = st.selectbox("How to handle missing", ['value', 'error', 'return_nan'], key="glmm_handle_missing")
+        # Get user inputs
+        verbose = st.number_input("Verbose level", min_value=0, max_value=1, value=0, key="glmm_verbose")
+        all_cols = list(self.data.columns)
+        cols = st.multiselect(
+            "Columns to encode", 
+            ["All Columns"] + all_cols,
+            key="glmm_cols"
+        )
+        y = st.selectbox(
+            "Target column (required)", 
+            all_cols,
+            key="glmm_target"
+        )
+        drop_invariant = st.checkbox("Drop invariant columns", False, key="glmm_drop_invariant")
+        handle_unknown = st.selectbox(
+            "Handle unknown categories", 
+            ['value', 'error', 'return_nan'], 
+            key="glmm_handle_unknown"
+        )
+        handle_missing = st.selectbox(
+            "Handle missing values", 
+            ['value', 'error', 'return_nan'], 
+            key="glmm_handle_missing"
+        )
         randomized = st.checkbox(
-            "Adds normal (Gaussian) distribution noise into training data to decrease overfitting (testing data are untouched).",
-            key="glmm_randomized")
+            "Add Gaussian noise for regularization", 
+            False, 
+            key="glmm_randomized"
+        )
+        
+        sigma = 0.05
         if randomized:
-            sigma = st.slider("Standard deviation (spread or “width”) of the normal distribution.", 0, 1, 0.05, key="glmm_sigma")
+            sigma = st.slider(
+                "Noise standard deviation", 
+                min_value=0.01, 
+                max_value=1.0, 
+                value=0.05, 
+                step=0.01,
+                key="glmm_sigma"
+            )
         
-        random_state = st.text_input("Specify random state", "None", key="glmm_random_state")
+        random_state = st.text_input("Random state (optional)", "None", key="glmm_random_state")
         
-        # Setting the values
-        cols = None if cols == "All Columns" else cols
+        # Process inputs
+        cols = None if "All Columns" in cols else cols
         random_state = None if random_state == "None" else int(random_state)
         
-        if st.checkbox("Apply Generalized Linear Mixed Model", key="glmm_apply"):
-            if randomized:
-                glmm = ce.GLMMEncoder(
-                    verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
-                    handle_missing=handle_missing, randomized=randomized, sigma=sigma,random_state=random_state)
-            else:
-                glmm = ce.GLMMEncoder(
-                    verbose=verbose, cols=cols, drop_invariant=drop_invariant, handle_unknown=handle_unknown,
-                    handle_missing=handle_missing,random_state=random_state)
-            if cols != None:
-                self.transformed = glmm.fit_transform(data[cols], y=y)
-            else:
-                self.transformed = glmm.fit_transform(data, y=y)
-        return self.transformed
+        if st.button("Apply GLMM Encoding"):
+            try:
+                # Initialize encoder
+                encoder_params = {
+                    'verbose': verbose,
+                    'cols': cols,
+                    'drop_invariant': drop_invariant,
+                    'handle_unknown': handle_unknown,
+                    'handle_missing': handle_missing,
+                    'random_state': random_state,
+                    'randomized': randomized
+                }
+                
+                if randomized:
+                    encoder_params['sigma'] = sigma
+                
+                glmm = ce.GLMMEncoder(**encoder_params)
+                
+                # Prepare data
+                X = self.data if cols is None else self.data[cols]
+                y_values = self.data[y]
+                
+                # Fit and transform
+                self.transformed = glmm.fit_transform(X, y=y_values)
+                
+                # Show results
+                st.success("GLMM encoding applied successfully!")
+                st.write("Transformed Data Preview:")
+                st.dataframe(self.transformed.head())
+
+            except Exception as e:
+                st.error(f"Error applying GLMM encoding: {str(e)}")
+                return self.data
+        
+        return self.transformed if hasattr(self, 'transformed') else self.data    
     def apply_gray_encoder(self):
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
         
