@@ -322,7 +322,7 @@ class Encoders:
                     self.transformed = helmert_encoder.fit_transform(self.data)
                 else:
                     self.transformed = helmert_encoder.fit_transform(self.data[cols])
-            
+            st.dataframe(self.transformed)
             return self.transformed
     def apply_james_stein_encoder(self):
         st.subheader("Enter the parameters and hit the checkbox to apply and store the transformation")
