@@ -130,7 +130,7 @@ class Encoders:
                     return_df=True
                 )
                 
-                X = self.data.drop(columns=[target_col])
+                X = self.data.drop()
                 y = self.data[target_col]
                 
                 self.transformed_data = encoder.fit_transform(X, y)
