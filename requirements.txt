@@ -7,7 +7,7 @@ pandas
 matplotlib
 seaborn
 
-pyjanitor
+pyjanitor==0.23.1
 
 chardet
 ydata-profiling
